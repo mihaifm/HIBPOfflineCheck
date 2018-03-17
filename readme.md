@@ -1,10 +1,12 @@
-## haveibeenpwned.plgx
+# haveibeenpwned.plgx
+
+![screen](https://user-images.githubusercontent.com/981184/37559417-71ac2bc4-2a2e-11e8-8e3d-5877d9d7a999.png)
 
 This is a [KeePass](https://keepass.info/) plugin for [Have I been pwned?](https://haveibeenpwned.com/).
 It performs a secure offline check against the password file for any individual password, 
 only when requested by the user by double-clicking the plugin column.
 
-### Motivation
+## Motivation
 
 [Have I been pwned?](https://haveibeenpwned.com/) is an excelent tool for checking leaked passwords.
 While it does provide an API for securely checking the passwords online, some bits of a hashed password still need
@@ -21,15 +23,15 @@ Features:
 - the status (Pwned or Secure) is saved in the KeePass database and will be retrieved when reopening the app, and cleared if the password entry changes
 - each password is individually checked only on user request
 
-### Prerequisites
+## Prerequisites
 
 - Download the [pwned-passwords-ordered-2.0.txt](https://downloads.pwnedpasswords.com/passwords/pwned-passwords-2.0.txt.7z.torrent) file from 
 haveibeenpwned.com [password list](https://haveibeenpwned.com/Passwords). Use the torrent if possible, as suggested by the author. It's important
 that you get the __ordered by hash__ version of the file.
-- Unzip the passwords file
-- Place the `pwned-passwords-ordered-2.0.txt` in the same location as KeePass.exe
+- Extract the file from the 7zip archive
+- Place the `pwned-passwords-ordered-2.0.txt` in the same location as `KeePass.exe`
 
-### Installation
+## Installation
 
 #### Secure:
 
@@ -41,19 +43,10 @@ that you get the __ordered by hash__ version of the file.
 - Download haveibeenpwned.plgx from Realeases
 - Copy it in the Plugins folder of the KeePass instalation
 
-### Usage
+## Usage
 
 In KeePass, enable the plugin column in `View->Configure Columns`. Double clicking the "Have I been pwned?" column for any entry will display
 the password status. Editing an entry will clear the status.
 
 Enjoy!
-
-
-
-
-
-
-
-
-
 
