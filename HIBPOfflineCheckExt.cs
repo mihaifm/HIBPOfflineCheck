@@ -15,9 +15,9 @@ using KeePassLib.Security;
 using System.Diagnostics;
 using System.Collections;
 
-namespace HaveIBeenPwnedOfflineCheck
+namespace HIBPOfflineCheck
 {
-    public sealed class HaveIBeenPwnedOfflineCheckExt : Plugin
+    public sealed class HIBPOfflineCheckExt : Plugin
     {
         private HIBPOfflineColumnProv m_prov = null;
 
@@ -52,6 +52,14 @@ namespace HaveIBeenPwnedOfflineCheck
             m_prov = null;
 
             m_host = null;
+        }
+
+        public override string UpdateUrl
+        {
+            get
+            {
+                return "https://raw.githubusercontent.com/mihaifm/HIBPOfflineCheck/master/version.txt";
+            }
         }
     }
 
@@ -183,7 +191,7 @@ namespace HaveIBeenPwnedOfflineCheck
 
         private void UpdateStatus(string status, PwEntry pe)
         {
-            MainForm mf = HaveIBeenPwnedOfflineCheckExt.Host.MainWindow;
+            MainForm mf = HIBPOfflineCheckExt.Host.MainWindow;
             ListView lv = (mf.Controls.Find("m_lvEntries", true)[0] as ListView);
 
             UIScrollInfo scroll = UIUtil.GetScrollInfo(lv, true);

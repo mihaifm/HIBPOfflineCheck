@@ -7,8 +7,8 @@
     <ProjectGuid>{B4DFC614-CDC6-43BE-8D6A-D4EFD47BB79E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HaveIBeenPwnedOfflineCheck</RootNamespace>
-    <AssemblyName>HaveIBeenPwnedOfflineCheck</AssemblyName>
+    <RootNamespace>HIBPOfflineCheck</RootNamespace>
+    <AssemblyName>HIBPOfflineCheck</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="KeePass">
-      <HintPath>..\..\Build\KeePass\Debug\KeePass.exe</HintPath>
+      <HintPath>C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HaveIBeenPwnedOfflineCheckExt.cs" />
+    <Compile Include="HIBPOfflineCheckExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

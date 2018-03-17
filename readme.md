@@ -1,4 +1,4 @@
-# haveibeenpwned.plgx
+# HIBPOfflineCheck
 
 ![screen](https://user-images.githubusercontent.com/981184/37559417-71ac2bc4-2a2e-11e8-8e3d-5877d9d7a999.png)
 
