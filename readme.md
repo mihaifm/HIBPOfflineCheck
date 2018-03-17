@@ -36,11 +36,11 @@ that you get the __ordered by hash__ version of the file.
 #### Secure:
 
 - Build the plugin from source using Visual Studio: open the .sln file and compile the Release configuration.
-- Copy the .dll from bin\Release to the Plugins folder of the KeePass installation
+- Copy the .dll from `bin\Release` to the Plugins folder of the KeePass installation
 
 #### Quick
 
-- Download haveibeenpwned.plgx from Realeases
+- Download `haveibeenpwned.plgx` from Realeases
 - Copy it in the Plugins folder of the KeePass instalation
 
 ## Usage
