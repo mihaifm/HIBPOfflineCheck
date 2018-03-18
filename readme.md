@@ -1,14 +1,14 @@
-# HIBPOfflineCheck
+# HIBP Offline Check
 
 ![screen](https://user-images.githubusercontent.com/981184/37559417-71ac2bc4-2a2e-11e8-8e3d-5877d9d7a999.png)
 
-This is a [KeePass](https://keepass.info/) plugin for [Have I been pwned?](https://haveibeenpwned.com/).    
+This is a __[KeePass](https://keepass.info/)__ plugin for __[Have I been pwned?](https://haveibeenpwned.com/)__.    
 It performs a secure offline check against the password file for any individual password, 
 only when requested by the user by double-clicking the plugin column.
 
 ## Motivation
 
-[Have I been pwned?](https://haveibeenpwned.com/) is an excelent tool for checking leaked passwords.
+[Have I been pwned?](https://haveibeenpwned.com/) is an excellent tool for checking leaked passwords.
 While it does provide an API for securely checking the passwords online, some bits of a hashed password still need
 to be sent to the service when performing this type of check.
 
