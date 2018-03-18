@@ -2,7 +2,7 @@
 
 ![screen](https://user-images.githubusercontent.com/981184/37559417-71ac2bc4-2a2e-11e8-8e3d-5877d9d7a999.png)
 
-This is a [KeePass](https://keepass.info/) plugin for [Have I been pwned?](https://haveibeenpwned.com/).
+This is a [KeePass](https://keepass.info/) plugin for [Have I been pwned?](https://haveibeenpwned.com/).    
 It performs a secure offline check against the password file for any individual password, 
 only when requested by the user by double-clicking the plugin column.
 
@@ -40,7 +40,7 @@ that you get the __ordered by hash__ version of the file.
 
 #### Quick
 
-- Download `haveibeenpwned.plgx` from Realeases
+- Download [HIBPOfflineCheck.plgx](https://github.com/mihaifm/HIBPOfflineCheck/releases/download/1.0.0/HIBPOfflineCheck.plgx) from Realeases
 - Copy it in the Plugins folder of the KeePass instalation
 
 ## Usage
