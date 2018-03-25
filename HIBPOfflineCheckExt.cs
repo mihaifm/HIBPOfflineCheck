@@ -14,6 +14,8 @@ using System.IO;
 using KeePassLib.Security;
 using System.Diagnostics;
 using System.Collections;
+using KeePassLib.Utility;
+using KeePass.Util;
 
 namespace HIBPOfflineCheck
 {
@@ -101,7 +103,8 @@ namespace HIBPOfflineCheck
             }
             pwd_sha_str = pwd_sha_str.ToUpperInvariant();
 
-            var files = Directory.GetFiles(".", HIBPFileName);
+            string appdir = UrlUtil.GetFileDirectory(WinUtil.GetExecutable(), false, true);
+            var files = Directory.GetFiles(appdir, HIBPFileName);
             if (files.Length == 0)
             {
                 Status = "HIBP file not found";
@@ -131,8 +134,10 @@ namespace HIBPOfflineCheck
 
                     line = sr.ReadLine();
 
+                    if (sr.EndOfStream) break;
+
                     // We may have read only a partial line so read again to make sure we get a full line
-                    if ((middle > 0) && (!sr.EndOfStream)) line = sr.ReadLine() ?? "";
+                    if (middle > 0) line = sr.ReadLine() ?? "";
 
                     int compare = String.Compare(pwd_sha_str, line.Substring(0, sha_len), StringComparison.Ordinal);
 
