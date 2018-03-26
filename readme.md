@@ -40,7 +40,7 @@ that you get the __ordered by hash__ version of the file.
 
 #### Quick
 
-- Download [HIBPOfflineCheck.plgx](https://github.com/mihaifm/HIBPOfflineCheck/releases/download/1.0.0/HIBPOfflineCheck.plgx) from Realeases
+- Download [HIBPOfflineCheck.plgx](https://github.com/mihaifm/HIBPOfflineCheck/releases/download/1.1.0/HIBPOfflineCheck.plgx) from Realeases
 - Copy it in the Plugins folder of the KeePass instalation
 
 ## Usage
