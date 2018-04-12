@@ -26,8 +26,9 @@ Features:
 ## Prerequisites
 
 - Download the [pwned-passwords-ordered-2.0.txt](https://downloads.pwnedpasswords.com/passwords/pwned-passwords-2.0.txt.7z.torrent) file from 
-haveibeenpwned.com [password list](https://haveibeenpwned.com/Passwords). Use the torrent if possible, as suggested by the author. It's important
-that you get the __ordered by hash__ version of the file.
+haveibeenpwned.com [password list](https://haveibeenpwned.com/Passwords). Use the torrent if possible, as suggested by the author.
+
+    __It's important that you get the -ordered- version of the file, the plugin uses it for fast searching__.
 - Extract the file from the 7zip archive
 - Place the `pwned-passwords-ordered-2.0.txt` in the same location as `KeePass.exe`
 
