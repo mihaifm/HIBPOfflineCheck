@@ -3,8 +3,9 @@
 ![screen](https://user-images.githubusercontent.com/981184/37559417-71ac2bc4-2a2e-11e8-8e3d-5877d9d7a999.png)
 
 This is a __[KeePass](https://keepass.info/)__ plugin for __[Have I been pwned?](https://haveibeenpwned.com/)__.    
-It performs a secure offline check against the password file for any individual password, 
-only when requested by the user by double-clicking the plugin column.
+It performs a secure __offline__ check against the password file for any selected password entry.    
+Double click the plugin column to get an instant status check, or use the right click menu to perform the same check 
+for all selected passwords.
 
 ## Motivation
 
@@ -20,17 +21,18 @@ which is then searched in the file. A status will be displayed on the column for
 Features:
 
 - binary search in the 30GB file gives an instant result
-- the status (Pwned or Secure) is saved in the KeePass database and will be retrieved when reopening the app, and cleared if the password entry changes
+- the status (Pwned or Secure) is saved in the KeePass database and will be retrieved when reopening the app, and updated if the password entry changes
 - each password is individually checked only on user request
+- multiple passwords can be checked in bulk by using the right click menu (under "Selected Entries")
 
 ## Prerequisites
 
-- Download the [pwned-passwords-ordered-2.0.txt](https://downloads.pwnedpasswords.com/passwords/pwned-passwords-2.0.txt.7z.torrent) file from 
+- Download the [pwned-passwords-ordered-by-hash.txt](https://downloads.pwnedpasswords.com/passwords/pwned-passwords-ordered-by-hash.7z.torrent) file from 
 haveibeenpwned.com [password list](https://haveibeenpwned.com/Passwords). Use the torrent if possible, as suggested by the author.
 
-    __It's important that you get the -ordered- version of the file, the plugin uses it for fast searching__.
+    __It's important that you get the -ordered-by-hash- version of the file, the plugin uses it for fast searching__.
 - Extract the file from the 7zip archive
-- Place the `pwned-passwords-ordered-2.0.txt` in the same location as `KeePass.exe`
+- Place the `pwned-passwords-ordered-by-hash.txt` in the same location as `KeePass.exe`
 
 ## Installation
 
@@ -41,13 +43,30 @@ haveibeenpwned.com [password list](https://haveibeenpwned.com/Passwords). Use th
 
 #### Quick
 
-- Download [HIBPOfflineCheck.plgx](https://github.com/mihaifm/HIBPOfflineCheck/releases/download/1.1.0/HIBPOfflineCheck.plgx) from Realeases
-- Copy it in the Plugins folder of the KeePass instalation
+- Download [HIBPOfflineCheck.plgx](https://github.com/mihaifm/HIBPOfflineCheck/releases/latest) from Releases
+- Copy it in the Plugins folder of the KeePass installation
 
 ## Usage
 
-In KeePass, enable the plugin column in `View->Configure Columns`. Double clicking the "Have I been pwned?" column for any entry will display
+* __Enable__
+
+In KeePass, enable the plugin column in `View->Configure Columns->Provided by Plugins`. Double clicking the "Have I been pwned?" column for any entry will display
 the password status. Editing an entry will clear the status.
+
+* __Double click__ a password entry under the `Have I been pwned?` column to get the status
+
+![image](https://user-images.githubusercontent.com/981184/46235975-6ce7d700-c385-11e8-9a1e-2d473d825ba1.png)    
+    
+
+* __Select multiple entries__, right click -> Selected Entries -> Have I been pwned?
+    
+![image](https://user-images.githubusercontent.com/981184/46236442-7bcf8900-c387-11e8-9017-06a0947d12ca.png)        
+    
+
+* __Entries are checked automattically after being updated__
+
+![image](https://user-images.githubusercontent.com/981184/46236364-11b6e400-c387-11e8-8034-416c7c3ee492.png)
+
 
 Enjoy!
 

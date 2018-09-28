@@ -1,3 +1,3 @@
 :
-HIBPOfflineCheck:1.1.0.0
+HIBPOfflineCheck:1.2.0.0
 :

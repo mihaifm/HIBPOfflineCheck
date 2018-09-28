@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 
-using KeePass;
 using KeePass.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
@@ -13,7 +10,6 @@ using System.Security.Cryptography;
 using System.IO;
 using KeePassLib.Security;
 using System.Diagnostics;
-using System.Collections;
 using KeePassLib.Utility;
 using KeePass.Util;
 
@@ -46,6 +42,8 @@ namespace HIBPOfflineCheck
             return true;
         }
 
+        
+
         public override void Terminate()
         {
             if (m_host == null) return;
@@ -67,11 +65,17 @@ namespace HIBPOfflineCheck
 
     public sealed class HIBPOfflineColumnProv : ColumnProvider
     {
-        private const string HIBPFileName = @"pwned-passwords-ordered*";
+        private const string HIBPFileName = @"pwned-passwords-ordered*.txt";
         private const string HIBPColumnName = "Have I been pwned?";
         private string Status { get; set; }
+        private PwEntry PasswordEntry { get; set; }
 
         public IPluginHost Host { get; set; }
+
+        public HIBPOfflineColumnProv()
+        {
+            HIBPOfflineCheckExt.Host.MainWindow.EntryContextMenu.Opening += ContextMenuStrip_Opening;
+        }
 
         public override string[] ColumnNames
         {
@@ -83,19 +87,11 @@ namespace HIBPOfflineCheck
             return (strColumnName == HIBPColumnName);
         }
 
-        public override void PerformCellAction(string strColumnName, PwEntry pe)
+        private void GetPasswordStatus()
         {
-            if (strColumnName == null || pe == null) { Debug.Assert(false); return; }
-            if (strColumnName != HIBPColumnName) { return; }
-
-            if (pe.Strings.Get(PwDefs.PasswordField) == null)
-            {
-                return;
-            }
-
             SHA1 sha1 = new SHA1CryptoServiceProvider();
 
-            var pwd_sha_bytes = sha1.ComputeHash(pe.Strings.Get(PwDefs.PasswordField).ReadUtf8());
+            var pwd_sha_bytes = sha1.ComputeHash(PasswordEntry.Strings.Get(PwDefs.PasswordField).ReadUtf8());
             var pwd_sha_str = "";
             foreach (byte b in pwd_sha_bytes)
             {
@@ -108,13 +104,30 @@ namespace HIBPOfflineCheck
             if (files.Length == 0)
             {
                 Status = "HIBP file not found";
-                UpdateStatus(Status, pe);
                 return;
             }
-            
+
+            var latestFile = files[0];
+
+            if (files.Length > 1)
+            {
+                DateTime maxCreationTime = File.GetLastWriteTime(latestFile);
+
+                for (int i = 1; i < files.Length; i++)
+                {
+                    DateTime creationTime = File.GetLastWriteTime(files[i]);
+
+                    if (creationTime > maxCreationTime)
+                    {
+                        maxCreationTime = creationTime;
+                        latestFile = files[i];
+                    }
+                }
+            }
+
             try
             {
-                FileStream fs = File.OpenRead(files[0]);
+                FileStream fs = File.OpenRead(latestFile);
                 StreamReader sr = new StreamReader(fs);
 
                 string line;
@@ -159,17 +172,29 @@ namespace HIBPOfflineCheck
                     }
                 }
 
-                UpdateStatus(Status, pe);
-
                 sr.Close();
                 fs.Close();
             }
             catch (Exception)
             {
                 Status = "Failed to read HIBP file";
-                UpdateStatus(Status, pe);
+            }
+        }
+
+        public override void PerformCellAction(string strColumnName, PwEntry pe)
+        {
+            if (strColumnName == null || pe == null) { Debug.Assert(false); return; }
+            if (strColumnName != HIBPColumnName) { return; }
+
+            if (pe.Strings.Get(PwDefs.PasswordField) == null)
+            {
                 return;
             }
+
+            PasswordEntry = pe;
+
+            GetPasswordStatus();
+            UpdateStatus();
         }
 
         private void PwdTouchedHandler(object sender, ObjectTouchedEventArgs e)
@@ -177,7 +202,7 @@ namespace HIBPOfflineCheck
             PwEntry pe = sender as PwEntry;
             if (e.Modified)
             {
-                pe.Strings.Set(HIBPColumnName, new ProtectedString(true, ""));
+                PerformCellAction(HIBPColumnName, pe);
             }
         }
 
@@ -194,18 +219,62 @@ namespace HIBPOfflineCheck
             return pe.Strings.Get(HIBPColumnName).ReadString();
         }
 
-        private void UpdateStatus(string status, PwEntry pe)
+        private void UpdateStatus()
         {
             MainForm mf = HIBPOfflineCheckExt.Host.MainWindow;
             ListView lv = (mf.Controls.Find("m_lvEntries", true)[0] as ListView);
 
             UIScrollInfo scroll = UIUtil.GetScrollInfo(lv, true);
 
-            pe.Strings.Set(HIBPColumnName, new ProtectedString(true, status));
+            PasswordEntry.Strings.Set(HIBPColumnName, new ProtectedString(true, Status));
 
             mf.UpdateUI(false, null, false, null, true, null, true);
 
             UIUtil.Scroll(lv, scroll, true);
+        }
+
+        private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
+            ToolStripItem[] items = mainForm.EntryContextMenu.Items.Find("m_ctxEntryMassModify", true);
+
+            if (items.Length > 0)
+            {
+                ToolStripMenuItem ctxEntryMassModify = items[0] as ToolStripMenuItem;
+
+                ToolStripItem[] hibpItems = ctxEntryMassModify.DropDownItems.Find("m_ctxEntryHIBP", true);
+
+                if (hibpItems.Length == 0)
+                {
+                    ToolStripSeparator separator = new ToolStripSeparator();
+                    ctxEntryMassModify.DropDownItems.Add(separator);
+
+                    ToolStripMenuItem hibpMenuItem = new ToolStripMenuItem();
+                    hibpMenuItem.Name = "m_ctxEntryHIBP";
+                    hibpMenuItem.Text = HIBPColumnName;
+                    hibpMenuItem.Click += this.OnMenuHIBP;
+                    ctxEntryMassModify.DropDownItems.Add(hibpMenuItem);
+                }
+            }
+        }
+
+        private delegate void UpdateStatusDelegate();
+
+        private void OnMenuHIBP(object sender, EventArgs e)
+        {
+            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
+            PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
+
+            foreach (PwEntry pwEntry in selectedEntries)
+            {
+                PasswordEntry = pwEntry;
+
+                UpdateStatusDelegate updateStatusDel = new UpdateStatusDelegate(GetPasswordStatus);
+                IAsyncResult asyncRes = updateStatusDel.BeginInvoke(null, null);
+                updateStatusDel.EndInvoke(asyncRes);
+                
+                UpdateStatus();
+            }
         }
     }
 }
