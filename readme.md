@@ -18,7 +18,7 @@ This plugin offers the alternative of an offline check, by using the 30GB file p
 The plugin adds a new column to KeePass. When double-clicking the column for a specific entry, the sha1 hash is calculated for the password,
 which is then searched in the file. A status will be displayed on the column for that specific password.
 
-Features:
+## Features
 
 - binary search in the 30GB file gives an instant result
 - the status (Pwned or Secure) is saved in the KeePass database and will be retrieved when reopening the app, and updated if the password entry changes
@@ -51,22 +51,37 @@ haveibeenpwned.com [password list](https://haveibeenpwned.com/Passwords). Use th
 * __Enable__
 
 In KeePass, enable the plugin column in `View->Configure Columns->Provided by Plugins`. Double clicking the "Have I been pwned?" column for any entry will display
-the password status. Editing an entry will clear the status.
+the password status. Editing an entry will update the status.
+
+--------------------------------------------------------------------------------------------
 
 * __Double click__ a password entry under the `Have I been pwned?` column to get the status
 
 ![image](https://user-images.githubusercontent.com/981184/46235975-6ce7d700-c385-11e8-9a1e-2d473d825ba1.png)    
     
+--------------------------------------------------------------------------------------------
 
 * __Select multiple entries__, right click -> Selected Entries -> Have I been pwned?
     
-![image](https://user-images.githubusercontent.com/981184/46236442-7bcf8900-c387-11e8-9017-06a0947d12ca.png)        
+![image](https://user-images.githubusercontent.com/981184/47184669-f1e66080-d333-11e8-8b14-01808a36706a.png)
+        
     
+--------------------------------------------------------------------------------------------
 
 * __Entries are checked automattically after being updated__
 
 ![image](https://user-images.githubusercontent.com/981184/46236364-11b6e400-c387-11e8-8034-416c7c3ee492.png)
 
+
+## Configuration
+
+To configure the plugin, open `Tools -> HIBP Offline Check...`
+
+![image](https://user-images.githubusercontent.com/981184/47183839-bba7e180-d331-11e8-8b4a-3afe75fd8dbe.png)
+
+Note that after changing the `Column name`, a new column will be create with the new name, that needs to be enabled under `View->Configure Columns->Provided by Plugins`    
+Before changing the column name, it is recommended that you clear the status of all entries (using `right click->Selected Entries->Clear pwned status`)    
+To make sure that you no longer have entries under the old column name, see if it still appears under `View->Configure Columns->Custom Fields`.    
 
 Enjoy!
 

@@ -37,6 +37,7 @@
       <HintPath>C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data" />
@@ -44,7 +45,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HIBPOfflineCheckExt.cs" />
+    <Compile Include="HIBPOfflineCheckOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HIBPOfflineCheckOptions.Designer.cs">
+      <DependentUpon>HIBPOfflineCheckOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HIBPOfflineCheckOptions.resx">
+      <DependentUpon>HIBPOfflineCheckOptions.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

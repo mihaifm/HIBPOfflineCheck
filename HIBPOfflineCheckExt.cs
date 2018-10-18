@@ -17,14 +17,15 @@ namespace HIBPOfflineCheck
 {
     public sealed class HIBPOfflineCheckExt : Plugin
     {
-        private HIBPOfflineColumnProv m_prov = null;
-
-        private static IPluginHost m_host = null;
+        private HIBPOfflineColumnProv prov = null;
+        private static IPluginHost PluginHost = null;
 
         internal static IPluginHost Host
         {
-            get { return m_host; }
+            get { return PluginHost; }
         }
+
+        private Options options = null;
 
         public override bool Initialize(IPluginHost host)
         {
@@ -32,79 +33,37 @@ namespace HIBPOfflineCheck
 
             if (host == null) return false;
 
-            m_host = host;
+            PluginHost = host;
 
-            m_prov = new HIBPOfflineColumnProv();
-            m_prov.Host = host;
+            ToolStripItemCollection tsMenu = PluginHost.MainWindow.ToolsMenu.DropDownItems;
+            tsMenu.Add(new ToolStripSeparator());
+            ToolStripMenuItem tsMenuItem = new ToolStripMenuItem("HIBP Offline Check...");
+            tsMenuItem.Click += new EventHandler(ToolsMenuItemClick);
+            tsMenu.Add(tsMenuItem);
 
-            m_host.ColumnProviderPool.Add(m_prov);
+            prov = new HIBPOfflineColumnProv() { Host = host };
+
+            options = LoadOptions();
+            prov.PluginOptions = options;
+
+            PluginHost.ColumnProviderPool.Add(prov);
 
             return true;
         }
 
-        
-
-        public override void Terminate()
+        private void ToolsMenuItemClick(object sender, EventArgs e)
         {
-            if (m_host == null) return;
-
-            m_host.ColumnProviderPool.Remove(m_prov);
-            m_prov = null;
-
-            m_host = null;
+            HIBPOfflineCheckOptions optionsForm = new HIBPOfflineCheckOptions(this);
+            optionsForm.Show();
         }
 
-        public override string UpdateUrl
+        private string GetDefaultFileName()
         {
-            get
-            {
-                return "https://raw.githubusercontent.com/mihaifm/HIBPOfflineCheck/master/version.txt";
-            }
-        }
-    }
-
-    public sealed class HIBPOfflineColumnProv : ColumnProvider
-    {
-        private const string HIBPFileName = @"pwned-passwords-ordered*.txt";
-        private const string HIBPColumnName = "Have I been pwned?";
-        private string Status { get; set; }
-        private PwEntry PasswordEntry { get; set; }
-
-        public IPluginHost Host { get; set; }
-
-        public HIBPOfflineColumnProv()
-        {
-            HIBPOfflineCheckExt.Host.MainWindow.EntryContextMenu.Opening += ContextMenuStrip_Opening;
-        }
-
-        public override string[] ColumnNames
-        {
-            get { return new string[] { HIBPColumnName }; }
-        }
-
-        public override bool SupportsCellAction(string strColumnName)
-        {
-            return (strColumnName == HIBPColumnName);
-        }
-
-        private void GetPasswordStatus()
-        {
-            SHA1 sha1 = new SHA1CryptoServiceProvider();
-
-            var pwd_sha_bytes = sha1.ComputeHash(PasswordEntry.Strings.Get(PwDefs.PasswordField).ReadUtf8());
-            var pwd_sha_str = "";
-            foreach (byte b in pwd_sha_bytes)
-            {
-                pwd_sha_str += b.ToString("x2");
-            }
-            pwd_sha_str = pwd_sha_str.ToUpperInvariant();
-
             string appdir = UrlUtil.GetFileDirectory(WinUtil.GetExecutable(), false, true);
-            var files = Directory.GetFiles(appdir, HIBPFileName);
+            var files = Directory.GetFiles(appdir, @"pwned-passwords-ordered*.txt");
             if (files.Length == 0)
             {
-                Status = "HIBP file not found";
-                return;
+                return "";
             }
 
             var latestFile = files[0];
@@ -125,13 +84,116 @@ namespace HIBPOfflineCheck
                 }
             }
 
+            return Path.GetFullPath(latestFile);
+        }
+
+        public override void Terminate()
+        {
+            if (PluginHost == null) return;
+
+            PluginHost.ColumnProviderPool.Remove(prov);
+            prov = null;
+
+            PluginHost = null;
+        }
+
+        public Options LoadOptions()
+        {
+            var config = PluginHost.CustomConfig;
+
+            Options options = new Options()
+            {
+                HIBPFileName = config.GetString(Options.Names.HIBPFileName, GetDefaultFileName()),
+                ColumnName = config.GetString(Options.Names.ColumnName, "Have I been pwned?"),
+                SecureText = config.GetString(Options.Names.SecureText, "Secure"),
+                InsecureText = config.GetString(Options.Names.InsecureText, "Pwned"),
+                BreachCountDetails = config.GetBool(Options.Names.BreachCountDetails, true),
+                WarningDialog = config.GetBool(Options.Names.WarningDialog, false)
+            };
+
+            this.options = options;
+            prov.PluginOptions = options;
+
+            return options;
+        }
+
+        public void SaveOptions(Options options)
+        {
+            var config = PluginHost.CustomConfig;
+
+            config.SetString(Options.Names.HIBPFileName, options.HIBPFileName);
+            config.SetString(Options.Names.ColumnName, options.ColumnName);
+            config.SetString(Options.Names.SecureText, options.SecureText);
+            config.SetString(Options.Names.InsecureText, options.InsecureText);
+            config.SetBool(Options.Names.BreachCountDetails, options.BreachCountDetails);
+            config.SetBool(Options.Names.WarningDialog, options.WarningDialog);
+
+            this.options = options;
+            prov.PluginOptions = options;
+        }
+
+        public override string UpdateUrl
+        {
+            get
+            {
+                return "https://raw.githubusercontent.com/mihaifm/HIBPOfflineCheck/master/version.txt";
+            }
+        }
+    }
+
+    public sealed class HIBPOfflineColumnProv : ColumnProvider
+    {
+        private string Status { get; set; }
+        private PwEntry PasswordEntry { get; set; }
+
+        public IPluginHost Host { get; set; }
+        public Options PluginOptions { get; set; }
+
+        private bool insecureWarning = false;
+        private bool passwordEdited = false;
+
+        public HIBPOfflineColumnProv()
+        {
+            HIBPOfflineCheckExt.Host.MainWindow.EntryContextMenu.Opening += ContextMenuStrip_Opening;
+        }
+
+        public override string[] ColumnNames
+        {
+            get { return new string[] { PluginOptions.ColumnName }; }
+        }
+
+        public override bool SupportsCellAction(string strColumnName)
+        {
+            return (strColumnName == PluginOptions.ColumnName);
+        }
+
+        private void GetPasswordStatus()
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider();
+
+            var pwd_sha_bytes = sha1.ComputeHash(PasswordEntry.Strings.Get(PwDefs.PasswordField).ReadUtf8());
+            var pwd_sha_str = "";
+            foreach (byte b in pwd_sha_bytes)
+            {
+                pwd_sha_str += b.ToString("x2");
+            }
+            pwd_sha_str = pwd_sha_str.ToUpperInvariant();
+
+            var latestFile = PluginOptions.HIBPFileName;
+
+            if (File.Exists(latestFile) == false)
+            {
+                Status = "HIBP file not found";
+                return;
+            }
+
             try
             {
                 FileStream fs = File.OpenRead(latestFile);
                 StreamReader sr = new StreamReader(fs);
 
                 string line;
-                Status = "Secure";
+                Status = PluginOptions.SecureText;
                 int sha_len = pwd_sha_str.Length;
 
                 var low = 0L;
@@ -165,8 +227,13 @@ namespace HIBPOfflineCheck
                     else
                     {
                         string[] tokens = line.Split(':');
-                        Status = "Pwned";
-                        Status += " (password count: " + tokens[1].Trim() + ")";
+                        Status = PluginOptions.InsecureText;
+                        insecureWarning = true;
+
+                        if (PluginOptions.BreachCountDetails)
+                        {
+                            Status += " (password count: " + tokens[1].Trim() + ")";
+                        }
 
                         break;
                     }
@@ -184,7 +251,7 @@ namespace HIBPOfflineCheck
         public override void PerformCellAction(string strColumnName, PwEntry pe)
         {
             if (strColumnName == null || pe == null) { Debug.Assert(false); return; }
-            if (strColumnName != HIBPColumnName) { return; }
+            if (strColumnName != PluginOptions.ColumnName) { return; }
 
             if (pe.Strings.Get(PwDefs.PasswordField) == null)
             {
@@ -202,7 +269,8 @@ namespace HIBPOfflineCheck
             PwEntry pe = sender as PwEntry;
             if (e.Modified)
             {
-                PerformCellAction(HIBPColumnName, pe);
+                passwordEdited = true;
+                PerformCellAction(PluginOptions.ColumnName, pe);
             }
         }
 
@@ -211,26 +279,35 @@ namespace HIBPOfflineCheck
             pe.Touched -= this.PwdTouchedHandler;
             pe.Touched += this.PwdTouchedHandler;
 
-            if (pe.Strings.Get(HIBPColumnName) == null)
+            if (pe.Strings.Get(PluginOptions.ColumnName) == null)
             {
                 return "";
             }
 
-            return pe.Strings.Get(HIBPColumnName).ReadString();
+            return pe.Strings.Get(PluginOptions.ColumnName).ReadString();
         }
 
         private void UpdateStatus()
         {
-            MainForm mf = HIBPOfflineCheckExt.Host.MainWindow;
-            ListView lv = (mf.Controls.Find("m_lvEntries", true)[0] as ListView);
+            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
+            ListView lv = (mainForm.Controls.Find("m_lvEntries", true)[0] as ListView);
 
             UIScrollInfo scroll = UIUtil.GetScrollInfo(lv, true);
 
-            PasswordEntry.Strings.Set(HIBPColumnName, new ProtectedString(true, Status));
+            PasswordEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(true, Status));
 
-            mf.UpdateUI(false, null, false, null, true, null, true);
+            mainForm.UpdateUI(false, null, false, null, true, null, true);
 
             UIUtil.Scroll(lv, scroll, true);
+
+            if (insecureWarning && passwordEdited && PluginOptions.WarningDialog)
+            {
+                MessageBox.Show("This password is insecure and publicly known", 
+                    " WARNING - INSECURE PASSWORD", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            insecureWarning = false;
+            passwordEdited = false;
         }
 
         private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -249,11 +326,24 @@ namespace HIBPOfflineCheck
                     ToolStripSeparator separator = new ToolStripSeparator();
                     ctxEntryMassModify.DropDownItems.Add(separator);
 
-                    ToolStripMenuItem hibpMenuItem = new ToolStripMenuItem();
-                    hibpMenuItem.Name = "m_ctxEntryHIBP";
-                    hibpMenuItem.Text = HIBPColumnName;
+                    ToolStripMenuItem hibpMenuItem = new ToolStripMenuItem()
+                    {
+                        Name = "m_ctxEntryHIBP",
+                        Text = "Have I been pwned?"
+                    };
+
                     hibpMenuItem.Click += this.OnMenuHIBP;
                     ctxEntryMassModify.DropDownItems.Add(hibpMenuItem);
+
+                    ToolStripMenuItem hibpClearMenuItem = new ToolStripMenuItem()
+                    {
+                        Name = "m_ctxEntryHIBPClear",
+                        Text = "Clear pwned status"
+                    };
+
+                    hibpClearMenuItem.Click += this.OnMenuHIBPClear;
+                    ctxEntryMassModify.DropDownItems.Add(hibpClearMenuItem);
+
                 }
             }
         }
@@ -275,6 +365,19 @@ namespace HIBPOfflineCheck
                 
                 UpdateStatus();
             }
+        }
+
+        private void OnMenuHIBPClear(object sender, EventArgs e)
+        {
+            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
+            PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
+
+            foreach (PwEntry pwEntry in selectedEntries)
+            {
+                pwEntry.Strings.Remove(PluginOptions.ColumnName);
+            }
+
+            mainForm.UpdateUI(false, null, false, null, true, null, true);
         }
     }
 }
