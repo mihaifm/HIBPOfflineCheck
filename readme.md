@@ -68,7 +68,7 @@ the password status. Editing an entry will update the status.
     
 --------------------------------------------------------------------------------------------
 
-* __Entries are checked automattically after being updated__
+* __Entries are checked automatically after being updated__
 
 ![image](https://user-images.githubusercontent.com/981184/46236364-11b6e400-c387-11e8-8034-416c7c3ee492.png)
 
@@ -79,9 +79,7 @@ To configure the plugin, open `Tools -> HIBP Offline Check...`
 
 ![image](https://user-images.githubusercontent.com/981184/47183839-bba7e180-d331-11e8-8b4a-3afe75fd8dbe.png)
 
-Note that after changing the `Column name`, a new column will be create with the new name, that needs to be enabled under `View->Configure Columns->Provided by Plugins`    
-Before changing the column name, it is recommended that you clear the status of all entries (using `right click->Selected Entries->Clear pwned status`)    
-To make sure that you no longer have entries under the old column name, see if it still appears under `View->Configure Columns->Custom Fields`.    
+Note that after changing the `Column name`, a new column will be created with the new name and needs to be enabled under `View->Configure Columns->Provided by Plugins`. Before changing the column name, it is recommended that you clear the status of all entries (using `right click->Selected Entries->Clear pwned status`). To make sure that you no longer have entries under the old column name, see if it still appears under `View->Configure Columns->Custom Fields`.
 
 Enjoy!
 
