@@ -15,6 +15,7 @@ namespace HIBPOfflineCheck
             public static string InsecureText = PluginNamespace + ".InsecureText";
             public static string BreachCountDetails = PluginNamespace + ".BreachCountDetails";
             public static string WarningDialog = PluginNamespace + ".WarningDialog";
+            public static string WarningDialogText = PluginNamespace + ".WarningDialogText";
         }
 
         public Options() { }
@@ -25,5 +26,6 @@ namespace HIBPOfflineCheck
         public string InsecureText { get; set; }
         public bool BreachCountDetails { get; set; }
         public bool WarningDialog { get; set; }
+        public string WarningDialogText { get; set; }
     }
 }

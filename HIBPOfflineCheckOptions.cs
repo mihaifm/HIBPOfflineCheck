@@ -1,4 +1,5 @@
-﻿using KeePass.App;
+﻿using KeePass.UI;
+using KeePass.App;
 using KeePass.Plugins;
 using KeePassLib;
 using System;
@@ -25,7 +26,9 @@ namespace HIBPOfflineCheck
         private void HIBPOfflineCheckOptions_Load(object sender, EventArgs e)
         {
             this.Icon = AppIcons.Default;
-            
+
+            pb_BannerImage.Image = BannerFactory.CreateBanner(pb_BannerImage.Width, pb_BannerImage.Height, BannerStyle.Default, Properties.Resources.B48x48_KOrganizer, "HIBP Offline Check Options", "Here you can manage HIBPOfflineCheck's settings.");
+
             options = ext.LoadOptions();
 
             textBoxFileName.Text = options.HIBPFileName;
@@ -34,9 +37,19 @@ namespace HIBPOfflineCheck
             textBoxInsecureText.Text = options.InsecureText;
             checkBoxBreachCountDetails.Checked = options.BreachCountDetails;
             checkBoxWarningDialog.Checked = options.WarningDialog;
+            textBoxWarningDialog.Text = options.WarningDialogText;
 
             textBoxFileName.Select();
             textBoxFileName.Select(0, 0);
+
+            if (checkBoxWarningDialog.Checked == false)
+            {
+                textBoxWarningDialog.Enabled = false;
+            }
+            else
+            {
+                textBoxWarningDialog.Enabled = true;
+            }
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -47,6 +60,7 @@ namespace HIBPOfflineCheck
             options.InsecureText = textBoxInsecureText.Text;
             options.BreachCountDetails = checkBoxBreachCountDetails.Checked;
             options.WarningDialog = checkBoxWarningDialog.Checked;
+            options.WarningDialogText = textBoxWarningDialog.Text;
 
             var standardFields = PwDefs.GetStandardFields();
 
@@ -77,6 +91,17 @@ namespace HIBPOfflineCheck
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 textBoxFileName.Text = dialog.FileName;
+            }
+        }
+
+        private void checkBoxWarningDialog_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxWarningDialog.Checked == false)
+            {
+                textBoxWarningDialog.Enabled = false;
+            }
+            else {
+                textBoxWarningDialog.Enabled = true;
             }
         }
     }

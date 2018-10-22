@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
+            this.textBoxWarningDialog = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.checkBoxWarningDialog = new System.Windows.Forms.CheckBox();
             this.buttonBrowse = new System.Windows.Forms.Button();
@@ -43,12 +44,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.pb_BannerImage = new System.Windows.Forms.PictureBox();
             this.groupBoxOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_BannerImage)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxOptions
             // 
             this.groupBoxOptions.BackColor = System.Drawing.SystemColors.Window;
+            this.groupBoxOptions.Controls.Add(this.textBoxWarningDialog);
             this.groupBoxOptions.Controls.Add(this.label5);
             this.groupBoxOptions.Controls.Add(this.checkBoxWarningDialog);
             this.groupBoxOptions.Controls.Add(this.buttonBrowse);
@@ -61,12 +65,23 @@
             this.groupBoxOptions.Controls.Add(this.label2);
             this.groupBoxOptions.Controls.Add(this.textBoxFileName);
             this.groupBoxOptions.Controls.Add(this.label1);
-            this.groupBoxOptions.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxOptions.Location = new System.Drawing.Point(12, 75);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(564, 180);
+            this.groupBoxOptions.Size = new System.Drawing.Size(564, 231);
             this.groupBoxOptions.TabIndex = 0;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
+            // 
+            // textBoxWarningDialog
+            // 
+            this.textBoxWarningDialog.AcceptsReturn = true;
+            this.textBoxWarningDialog.Location = new System.Drawing.Point(27, 172);
+            this.textBoxWarningDialog.Multiline = true;
+            this.textBoxWarningDialog.Name = "textBoxWarningDialog";
+            this.textBoxWarningDialog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxWarningDialog.Size = new System.Drawing.Size(514, 50);
+            this.textBoxWarningDialog.TabIndex = 12;
+            this.textBoxWarningDialog.Text = "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known";
             // 
             // label5
             // 
@@ -82,10 +97,11 @@
             this.checkBoxWarningDialog.AutoSize = true;
             this.checkBoxWarningDialog.Location = new System.Drawing.Point(6, 149);
             this.checkBoxWarningDialog.Name = "checkBoxWarningDialog";
-            this.checkBoxWarningDialog.Size = new System.Drawing.Size(254, 17);
+            this.checkBoxWarningDialog.Size = new System.Drawing.Size(297, 17);
             this.checkBoxWarningDialog.TabIndex = 9;
-            this.checkBoxWarningDialog.Text = "Display warning after editing insecure passwords";
+            this.checkBoxWarningDialog.Text = "Display warning mesage after editing insecure passwords:";
             this.checkBoxWarningDialog.UseVisualStyleBackColor = true;
+            this.checkBoxWarningDialog.CheckedChanged += new System.EventHandler(this.checkBoxWarningDialog_CheckedChanged);
             // 
             // buttonBrowse
             // 
@@ -179,7 +195,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(419, 198);
+            this.buttonOK.Location = new System.Drawing.Point(419, 312);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 2;
@@ -191,13 +207,21 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(501, 198);
+            this.buttonCancel.Location = new System.Drawing.Point(501, 312);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // pb_BannerImage
+            // 
+            this.pb_BannerImage.Location = new System.Drawing.Point(0, 0);
+            this.pb_BannerImage.Name = "pb_BannerImage";
+            this.pb_BannerImage.Size = new System.Drawing.Size(588, 60);
+            this.pb_BannerImage.TabIndex = 3;
+            this.pb_BannerImage.TabStop = false;
             // 
             // HIBPOfflineCheckOptions
             // 
@@ -206,7 +230,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(588, 232);
+            this.ClientSize = new System.Drawing.Size(588, 346);
+            this.Controls.Add(this.pb_BannerImage);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.groupBoxOptions);
@@ -215,11 +240,12 @@
             this.MinimizeBox = false;
             this.Name = "HIBPOfflineCheckOptions";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "HIBP Offline Check - Plugin Options";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "HIBP Offline Check Options";
             this.Load += new System.EventHandler(this.HIBPOfflineCheckOptions_Load);
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_BannerImage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -241,5 +267,7 @@
         private System.Windows.Forms.Button buttonBrowse;
         private System.Windows.Forms.CheckBox checkBoxWarningDialog;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox pb_BannerImage;
+        private System.Windows.Forms.TextBox textBoxWarningDialog;
     }
 }
