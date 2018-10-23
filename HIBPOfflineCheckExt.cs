@@ -108,7 +108,8 @@ namespace HIBPOfflineCheck
                 SecureText = config.GetString(Options.Names.SecureText, "Secure"),
                 InsecureText = config.GetString(Options.Names.InsecureText, "Pwned"),
                 BreachCountDetails = config.GetBool(Options.Names.BreachCountDetails, true),
-                WarningDialog = config.GetBool(Options.Names.WarningDialog, false)
+                WarningDialog = config.GetBool(Options.Names.WarningDialog, false),
+                WarningDialogText = config.GetString(Options.Names.WarningDialogText, "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known")
             };
 
             this.options = options;
@@ -121,12 +122,15 @@ namespace HIBPOfflineCheck
         {
             var config = PluginHost.CustomConfig;
 
+            if (options.WarningDialogText == "") { options.WarningDialogText = "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known"; }
+
             config.SetString(Options.Names.HIBPFileName, options.HIBPFileName);
             config.SetString(Options.Names.ColumnName, options.ColumnName);
             config.SetString(Options.Names.SecureText, options.SecureText);
             config.SetString(Options.Names.InsecureText, options.InsecureText);
             config.SetBool(Options.Names.BreachCountDetails, options.BreachCountDetails);
             config.SetBool(Options.Names.WarningDialog, options.WarningDialog);
+            config.SetString(Options.Names.WarningDialogText, options.WarningDialogText);
 
             this.options = options;
             prov.PluginOptions = options;
@@ -302,8 +306,8 @@ namespace HIBPOfflineCheck
 
             if (insecureWarning && passwordEdited && PluginOptions.WarningDialog)
             {
-                MessageBox.Show("This password is insecure and publicly known", 
-                    " WARNING - INSECURE PASSWORD", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(PluginOptions.WarningDialogText,
+                    "HIBP Offline Check", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             insecureWarning = false;
