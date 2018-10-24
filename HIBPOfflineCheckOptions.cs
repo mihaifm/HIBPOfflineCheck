@@ -1,13 +1,7 @@
 ﻿using KeePass.UI;
 using KeePass.App;
-using KeePass.Plugins;
 using KeePassLib;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace HIBPOfflineCheck
@@ -27,7 +21,9 @@ namespace HIBPOfflineCheck
         {
             this.Icon = AppIcons.Default;
 
-            pb_BannerImage.Image = BannerFactory.CreateBanner(pb_BannerImage.Width, pb_BannerImage.Height, BannerStyle.Default, Properties.Resources.B48x48_KOrganizer, "HIBP Offline Check Options", "Here you can manage HIBPOfflineCheck's settings.");
+            pb_BannerImage.Image = BannerFactory.CreateBanner(pb_BannerImage.Width, pb_BannerImage.Height, 
+                BannerStyle.Default, Properties.Resources.B48x48_KOrganizer, 
+                "HIBP Offline Check Options", "Manage plugin settings.");
 
             options = ext.LoadOptions();
 
@@ -100,7 +96,8 @@ namespace HIBPOfflineCheck
             {
                 textBoxWarningDialog.Enabled = false;
             }
-            else {
+            else
+            {
                 textBoxWarningDialog.Enabled = true;
             }
         }

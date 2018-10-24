@@ -109,7 +109,8 @@ namespace HIBPOfflineCheck
                 InsecureText = config.GetString(Options.Names.InsecureText, "Pwned"),
                 BreachCountDetails = config.GetBool(Options.Names.BreachCountDetails, true),
                 WarningDialog = config.GetBool(Options.Names.WarningDialog, false),
-                WarningDialogText = config.GetString(Options.Names.WarningDialogText, "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known")
+                WarningDialogText = XmlUnescape(config.GetString(Options.Names.WarningDialogText,
+                    "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known"))
             };
 
             this.options = options;
@@ -122,18 +123,26 @@ namespace HIBPOfflineCheck
         {
             var config = PluginHost.CustomConfig;
 
-            if (options.WarningDialogText == "") { options.WarningDialogText = "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known"; }
-
             config.SetString(Options.Names.HIBPFileName, options.HIBPFileName);
             config.SetString(Options.Names.ColumnName, options.ColumnName);
             config.SetString(Options.Names.SecureText, options.SecureText);
             config.SetString(Options.Names.InsecureText, options.InsecureText);
             config.SetBool(Options.Names.BreachCountDetails, options.BreachCountDetails);
             config.SetBool(Options.Names.WarningDialog, options.WarningDialog);
-            config.SetString(Options.Names.WarningDialogText, options.WarningDialogText);
+            config.SetString(Options.Names.WarningDialogText, XmlEscape(options.WarningDialogText));
 
             this.options = options;
             prov.PluginOptions = options;
+        }
+
+        public static string XmlEscape(string unescaped)
+        {
+            return unescaped.Replace(Environment.NewLine, "&#xD;&#xA;");
+        }
+
+        public static string XmlUnescape(string escaped)
+        {
+            return escaped.Replace("&#xD;&#xA;", Environment.NewLine);
         }
 
         public override string UpdateUrl

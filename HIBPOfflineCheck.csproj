@@ -71,6 +71,8 @@
   <ItemGroup>
     <None Include="Resources\Nuvola\B48x48_KOrganizer.png" />
     <Content Include="version.txt" />
+    <None Include="Util\build_plgx.bat" />
+    <None Include="Util\mihaifm.asc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.md" />
