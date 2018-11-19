@@ -1,0 +1,9 @@
+.vs
+bin/*
+obj/*
+screen.png
+plgx/*
+*.plgx
+release_checklist.txt
+HIBPOfflineCheck.plgx.asc
+*temp.bat
