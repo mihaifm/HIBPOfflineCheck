@@ -12,6 +12,8 @@ using KeePassLib.Security;
 using System.Diagnostics;
 using KeePassLib.Utility;
 using KeePass.Util;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace HIBPOfflineCheck
 {
@@ -180,30 +182,38 @@ namespace HIBPOfflineCheck
             return (strColumnName == PluginOptions.ColumnName);
         }
 
+        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Dispose is idempotent")]
         private void GetPasswordStatus()
         {
-            SHA1 sha1 = new SHA1CryptoServiceProvider();
+            var pwd_sha_str = String.Empty;
 
-            var pwd_sha_bytes = sha1.ComputeHash(PasswordEntry.Strings.Get(PwDefs.PasswordField).ReadUtf8());
-            var pwd_sha_str = "";
-            foreach (byte b in pwd_sha_bytes)
+            using (var sha1 = new SHA1CryptoServiceProvider())
             {
-                pwd_sha_str += b.ToString("x2");
+                var pwd_sha_bytes = sha1.ComputeHash(PasswordEntry.Strings.Get(PwDefs.PasswordField).ReadUtf8());
+                var sb = new StringBuilder(2 * pwd_sha_bytes.Length);
+
+                foreach (byte b in pwd_sha_bytes)
+                {
+                    sb.AppendFormat("{0:X2}", b);
+                }
+                pwd_sha_str = sb.ToString();
             }
-            pwd_sha_str = pwd_sha_str.ToUpperInvariant();
 
             var latestFile = PluginOptions.HIBPFileName;
 
-            if (File.Exists(latestFile) == false)
+            if (!File.Exists(latestFile))
             {
                 Status = "HIBP file not found";
                 return;
             }
 
+            FileStream fs = null;
+            StreamReader sr = null;
+
             try
             {
-                FileStream fs = File.OpenRead(latestFile);
-                StreamReader sr = new StreamReader(fs);
+                fs = File.OpenRead(latestFile);
+                sr = new StreamReader(fs);
 
                 string line;
                 Status = PluginOptions.SecureText;
@@ -225,7 +235,7 @@ namespace HIBPOfflineCheck
                     if (sr.EndOfStream) break;
 
                     // We may have read only a partial line so read again to make sure we get a full line
-                    if (middle > 0) line = sr.ReadLine() ?? "";
+                    if (middle > 0) line = sr.ReadLine() ?? String.Empty;
 
                     int compare = String.Compare(pwd_sha_str, line.Substring(0, sha_len), StringComparison.Ordinal);
 
@@ -251,13 +261,22 @@ namespace HIBPOfflineCheck
                         break;
                     }
                 }
-
-                sr.Close();
-                fs.Close();
             }
-            catch (Exception)
+            catch
             {
                 Status = "Failed to read HIBP file";
+            }
+            finally
+            {
+                if (sr != null)
+                {
+                    sr.Dispose();
+                }
+
+                if (fs != null)
+                {
+                    fs.Dispose();
+                }
             }
         }
 
