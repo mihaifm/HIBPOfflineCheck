@@ -14,6 +14,7 @@ using KeePassLib.Utility;
 using KeePass.Util;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using KeePass.Util.Spr;
 
 namespace HIBPOfflineCheck
 {
@@ -189,7 +190,9 @@ namespace HIBPOfflineCheck
 
             using (var sha1 = new SHA1CryptoServiceProvider())
             {
-                var pwd_sha_bytes = sha1.ComputeHash(PasswordEntry.Strings.Get(PwDefs.PasswordField).ReadUtf8());
+                var password = SprEngine.Compile(PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).ReadString(), new SprContext(PasswordEntry,Host.Database, SprCompileFlags.All));
+
+                var pwd_sha_bytes = sha1.ComputeHash(UTF8Encoding.UTF8.GetBytes(password));
                 var sb = new StringBuilder(2 * pwd_sha_bytes.Length);
 
                 foreach (byte b in pwd_sha_bytes)
