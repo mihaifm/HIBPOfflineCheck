@@ -1,5 +1,6 @@
 set PluginRoot=..
 set KeePassExe=%PluginRoot%\bin\Debug\KeePass.exe
+Set BuildPath=%~dp0
 
 xcopy /Y %PluginRoot%\Properties\AssemblyInfo.cs plgx\Properties\
 xcopy /Y %PluginRoot%\HIBPOfflineCheck.csproj plgx\
@@ -13,9 +14,8 @@ xcopy /Y %PluginRoot%\Resources\Nuvola\B48x48_KOrganizer.png plgx\Resources\Nuvo
 xcopy /Y %PluginRoot%\Properties\Resources.Designer.cs plgx\Properties\
 xcopy /Y %PluginRoot%\Properties\Resources.resx plgx\Properties\
 
-%KeePassExe% --plgx-create %~dp0plgx
+%KeePassExe% --plgx-create "%BuildPath%plgx"
 
-@ rem run the hole .bat from an existing command line, otherwise the file won't be moved
-move /Y %~dp0plgx.plgx %PluginRoot%\HIBPOfflineCheck.plgx
+move /Y "%BuildPath%plgx.plgx" %PluginRoot%\HIBPOfflineCheck.plgx
 
-rmdir /S /Q %~dp0plgx
+rmdir /S /Q "%BuildPath%plgx
