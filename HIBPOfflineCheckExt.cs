@@ -12,8 +12,6 @@ using KeePassLib.Security;
 using System.Diagnostics;
 using KeePassLib.Utility;
 using KeePass.Util;
-using System.Text;
-using KeePass.Util.Spr;
 
 namespace HIBPOfflineCheck
 {
@@ -36,6 +34,13 @@ namespace HIBPOfflineCheck
             if (host == null) return false;
 
             PluginHost = host;
+
+            ToolStripItemCollection tsMenu = PluginHost.MainWindow.ToolsMenu.DropDownItems;
+            tsMenu.Add(new ToolStripSeparator());
+            ToolStripMenuItem tsMenuItem = new ToolStripMenuItem("HIBP Offline Check...");
+            tsMenuItem.Click += new EventHandler(ToolsMenuItemClick);
+            tsMenu.Add(tsMenuItem);
+
             prov = new HIBPOfflineColumnProv() { Host = host };
 
             options = LoadOptions();
@@ -44,18 +49,6 @@ namespace HIBPOfflineCheck
             PluginHost.ColumnProviderPool.Add(prov);
 
             return true;
-        }
-
-        public override ToolStripMenuItem GetMenuItem(PluginMenuType t)
-        {
-            if (t == PluginMenuType.Main)
-            {
-                ToolStripMenuItem tsMenuItem = new ToolStripMenuItem("HIBP Offline Check...");
-                tsMenuItem.Click += new EventHandler(ToolsMenuItemClick);
-                return tsMenuItem;
-            }
-
-            return null;
         }
 
         private void ToolsMenuItemClick(object sender, EventArgs e)
@@ -189,87 +182,82 @@ namespace HIBPOfflineCheck
 
         private void GetPasswordStatus()
         {
-            var pwd_sha_str = String.Empty;
+            SHA1 sha1 = new SHA1CryptoServiceProvider();
 
-            using (var sha1 = new SHA1CryptoServiceProvider())
+            var pwd_sha_bytes = sha1.ComputeHash(PasswordEntry.Strings.Get(PwDefs.PasswordField).ReadUtf8());
+            var pwd_sha_str = "";
+            foreach (byte b in pwd_sha_bytes)
             {
-                var context = new SprContext(PasswordEntry, Host.Database, SprCompileFlags.All);
-                var password = SprEngine.Compile(PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).ReadString(), context);
-
-                var pwd_sha_bytes = sha1.ComputeHash(UTF8Encoding.UTF8.GetBytes(password));
-                var sb = new StringBuilder(2 * pwd_sha_bytes.Length);
-
-                foreach (byte b in pwd_sha_bytes)
-                {
-                    sb.AppendFormat("{0:X2}", b);
-                }
-                pwd_sha_str = sb.ToString();
+                pwd_sha_str += b.ToString("x2");
             }
+            pwd_sha_str = pwd_sha_str.ToUpperInvariant();
 
             var latestFile = PluginOptions.HIBPFileName;
 
-            if (!File.Exists(latestFile))
+            if (File.Exists(latestFile) == false)
             {
                 Status = "HIBP file not found";
                 return;
             }
 
-            using (FileStream fs = File.OpenRead(latestFile))
-            using (StreamReader sr = new StreamReader(fs))
+            try
             {
-                try
+                FileStream fs = File.OpenRead(latestFile);
+                StreamReader sr = new StreamReader(fs);
+
+                string line;
+                Status = PluginOptions.SecureText;
+                int sha_len = pwd_sha_str.Length;
+
+                var low = 0L;
+                var high = fs.Length;
+
+                while (low <= high)
                 {
-                    string line;
-                    Status = PluginOptions.SecureText;
-                    int sha_len = pwd_sha_str.Length;
+                    var middle = (low + high + 1) / 2;
+                    fs.Seek(middle, SeekOrigin.Begin);
 
-                    var low = 0L;
-                    var high = fs.Length;
+                    // Resync with base stream after seek
+                    sr.DiscardBufferedData();
 
-                    while (low <= high)
+                    line = sr.ReadLine();
+
+                    if (sr.EndOfStream) break;
+
+                    // We may have read only a partial line so read again to make sure we get a full line
+                    if (middle > 0) line = sr.ReadLine() ?? "";
+
+                    int compare = String.Compare(pwd_sha_str, line.Substring(0, sha_len), StringComparison.Ordinal);
+
+                    if (compare < 0)
                     {
-                        var middle = (low + high + 1) / 2;
-                        fs.Seek(middle, SeekOrigin.Begin);
+                        high = middle - 1;
+                    }
+                    else if (compare > 0)
+                    {
+                        low = middle + 1;
+                    }
+                    else
+                    {
+                        string[] tokens = line.Split(':');
+                        Status = PluginOptions.InsecureText;
+                        insecureWarning = true;
 
-                        // Resync with base stream after seek
-                        sr.DiscardBufferedData();
-
-                        line = sr.ReadLine();
-
-                        if (sr.EndOfStream) break;
-
-                        // We may have read only a partial line so read again to make sure we get a full line
-                        if (middle > 0) line = sr.ReadLine() ?? String.Empty;
-
-                        int compare = String.Compare(pwd_sha_str, line.Substring(0, sha_len), StringComparison.Ordinal);
-
-                        if (compare < 0)
+                        if (PluginOptions.BreachCountDetails)
                         {
-                            high = middle - 1;
+                            Status += " (password count: " + tokens[1].Trim() + ")";
                         }
-                        else if (compare > 0)
-                        {
-                            low = middle + 1;
-                        }
-                        else
-                        {
-                            string[] tokens = line.Split(':');
-                            Status = PluginOptions.InsecureText;
-                            insecureWarning = true;
 
-                            if (PluginOptions.BreachCountDetails)
-                            {
-                                Status += " (password count: " + tokens[1].Trim() + ")";
-                            }
-
-                            break;
-                        }
+                        break;
                     }
                 }
-                catch
-                {
-                    Status = "Failed to read HIBP file";
-                }
+
+                sr.Close();
+                fs.Close();
+            }
+            catch (Exception)
+            {
+                Status = "Failed to read HIBP file";
             }
         }
 
@@ -319,7 +307,7 @@ namespace HIBPOfflineCheck
 
             UIScrollInfo scroll = UIUtil.GetScrollInfo(lv, true);
 
-            PasswordEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(true, Status));
+            PasswordEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(false, Status));
 
             mainForm.UpdateUI(false, null, false, null, true, null, true);
 
