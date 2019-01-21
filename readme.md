@@ -13,26 +13,26 @@ for all selected passwords.
 While it does provide an API for securely checking the passwords online, some bits of a hashed password still need
 to be sent to the service when performing this type of check.
 
-This plugin offers the alternative of an offline check, by using the 30GB file provided by [Have I been pwned?](https://haveibeenpwned.com/).
+This plugin offers the alternative of an offline check, by using the downloadable file provided by [Have I been pwned?](https://haveibeenpwned.com/).
 
 The plugin adds a new column to KeePass. When double-clicking the column for a specific entry, the sha1 hash is calculated for the password,
 which is then searched in the file. A status will be displayed on the column for that specific password.
 
 ## Features
 
-- binary search in the 30GB file gives an instant result
+- binary search in the large password file gives an instant result
 - the status (Pwned or Secure) is saved in the KeePass database and will be retrieved when reopening the app, and updated if the password entry changes
 - each password is individually checked only on user request
 - multiple passwords can be checked in bulk by using the right click menu (under "Selected Entries")
 
 ## Prerequisites
 
-- Download the [pwned-passwords-ordered-by-hash.txt](https://downloads.pwnedpasswords.com/passwords/pwned-passwords-ordered-by-hash.7z.torrent) file from 
+- Download the [pwned-passwords-sha1-ordered-by-hash-v4.txt](https://haveibeenpwned.com/Passwords) file from 
 haveibeenpwned.com [password list](https://haveibeenpwned.com/Passwords). Use the torrent if possible, as suggested by the author.
 
-    __It's important that you get the -ordered-by-hash- version of the file, the plugin uses it for fast searching__.
+    __It's important that you get the SHA-1 (ordered by hash) version of the file, the plugin uses it for fast searching__.
 - Extract the file from the 7zip archive
-- Place the `pwned-passwords-ordered-by-hash.txt` in the same location as `KeePass.exe`
+- Place the `pwned-passwords-sha1-ordered-by-hash-v4.txt` file in the same location as `KeePass.exe` (file location is configurable in the options)
 
 ## Installation
 

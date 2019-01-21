@@ -12,7 +12,6 @@ using KeePassLib.Security;
 using System.Diagnostics;
 using KeePassLib.Utility;
 using KeePass.Util;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using KeePass.Util.Spr;
 
@@ -37,13 +36,6 @@ namespace HIBPOfflineCheck
             if (host == null) return false;
 
             PluginHost = host;
-
-            ToolStripItemCollection tsMenu = PluginHost.MainWindow.ToolsMenu.DropDownItems;
-            tsMenu.Add(new ToolStripSeparator());
-            ToolStripMenuItem tsMenuItem = new ToolStripMenuItem("HIBP Offline Check...");
-            tsMenuItem.Click += new EventHandler(ToolsMenuItemClick);
-            tsMenu.Add(tsMenuItem);
-
             prov = new HIBPOfflineColumnProv() { Host = host };
 
             options = LoadOptions();
@@ -52,6 +44,18 @@ namespace HIBPOfflineCheck
             PluginHost.ColumnProviderPool.Add(prov);
 
             return true;
+        }
+
+        public override ToolStripMenuItem GetMenuItem(PluginMenuType t)
+        {
+            if (t == PluginMenuType.Main)
+            {
+                ToolStripMenuItem tsMenuItem = new ToolStripMenuItem("HIBP Offline Check...");
+                tsMenuItem.Click += new EventHandler(ToolsMenuItemClick);
+                return tsMenuItem;
+            }
+
+            return null;
         }
 
         private void ToolsMenuItemClick(object sender, EventArgs e)
@@ -183,14 +187,14 @@ namespace HIBPOfflineCheck
             return (strColumnName == PluginOptions.ColumnName);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Dispose is idempotent")]
         private void GetPasswordStatus()
         {
             var pwd_sha_str = String.Empty;
 
             using (var sha1 = new SHA1CryptoServiceProvider())
             {
-                var password = SprEngine.Compile(PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).ReadString(), new SprContext(PasswordEntry,Host.Database, SprCompileFlags.All));
+                var context = new SprContext(PasswordEntry, Host.Database, SprCompileFlags.All);
+                var password = SprEngine.Compile(PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).ReadString(), context);
 
                 var pwd_sha_bytes = sha1.ComputeHash(UTF8Encoding.UTF8.GetBytes(password));
                 var sb = new StringBuilder(2 * pwd_sha_bytes.Length);
@@ -210,75 +214,61 @@ namespace HIBPOfflineCheck
                 return;
             }
 
-            FileStream fs = null;
-            StreamReader sr = null;
-
-            try
+            using (FileStream fs = File.OpenRead(latestFile))
+            using (StreamReader sr = new StreamReader(fs))
             {
-                fs = File.OpenRead(latestFile);
-                sr = new StreamReader(fs);
-
-                string line;
-                Status = PluginOptions.SecureText;
-                int sha_len = pwd_sha_str.Length;
-
-                var low = 0L;
-                var high = fs.Length;
-
-                while (low <= high)
+                try
                 {
-                    var middle = (low + high + 1) / 2;
-                    fs.Seek(middle, SeekOrigin.Begin);
+                    string line;
+                    Status = PluginOptions.SecureText;
+                    int sha_len = pwd_sha_str.Length;
 
-                    // Resync with base stream after seek
-                    sr.DiscardBufferedData();
+                    var low = 0L;
+                    var high = fs.Length;
 
-                    line = sr.ReadLine();
-
-                    if (sr.EndOfStream) break;
-
-                    // We may have read only a partial line so read again to make sure we get a full line
-                    if (middle > 0) line = sr.ReadLine() ?? String.Empty;
-
-                    int compare = String.Compare(pwd_sha_str, line.Substring(0, sha_len), StringComparison.Ordinal);
-
-                    if (compare < 0)
+                    while (low <= high)
                     {
-                        high = middle - 1;
-                    }
-                    else if (compare > 0)
-                    {
-                        low = middle + 1;
-                    }
-                    else
-                    {
-                        string[] tokens = line.Split(':');
-                        Status = PluginOptions.InsecureText;
-                        insecureWarning = true;
+                        var middle = (low + high + 1) / 2;
+                        fs.Seek(middle, SeekOrigin.Begin);
 
-                        if (PluginOptions.BreachCountDetails)
+                        // Resync with base stream after seek
+                        sr.DiscardBufferedData();
+
+                        line = sr.ReadLine();
+
+                        if (sr.EndOfStream) break;
+
+                        // We may have read only a partial line so read again to make sure we get a full line
+                        if (middle > 0) line = sr.ReadLine() ?? String.Empty;
+
+                        int compare = String.Compare(pwd_sha_str, line.Substring(0, sha_len), StringComparison.Ordinal);
+
+                        if (compare < 0)
                         {
-                            Status += " (password count: " + tokens[1].Trim() + ")";
+                            high = middle - 1;
                         }
+                        else if (compare > 0)
+                        {
+                            low = middle + 1;
+                        }
+                        else
+                        {
+                            string[] tokens = line.Split(':');
+                            Status = PluginOptions.InsecureText;
+                            insecureWarning = true;
 
-                        break;
+                            if (PluginOptions.BreachCountDetails)
+                            {
+                                Status += " (password count: " + tokens[1].Trim() + ")";
+                            }
+
+                            break;
+                        }
                     }
                 }
-            }
-            catch
-            {
-                Status = "Failed to read HIBP file";
-            }
-            finally
-            {
-                if (sr != null)
+                catch
                 {
-                    sr.Dispose();
-                }
-
-                if (fs != null)
-                {
-                    fs.Dispose();
+                    Status = "Failed to read HIBP file";
                 }
             }
         }
