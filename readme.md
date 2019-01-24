@@ -68,6 +68,12 @@ the password status. Editing an entry will update the status.
     
 --------------------------------------------------------------------------------------------
 
+* __Check all the passwords in the database__ using [this simple method](https://github.com/mihaifm/HIBPOfflineCheck/issues/5#issuecomment-456998959): Search for nothing in the search box, this will display all your passwords. Select all (ctrl+a) -> right click -> Selected Entries -> Have I been pwned?
+
+    Note that this may take several minutes to complete, depending on the number of passwords.
+
+--------------------------------------------------------------------------------------------
+
 * __Entries are checked automatically after being updated__
 
 ![image](https://user-images.githubusercontent.com/981184/46236364-11b6e400-c387-11e8-8034-416c7c3ee492.png)
