@@ -278,11 +278,6 @@ namespace HIBPOfflineCheck
             if (strColumnName == null || pe == null) { Debug.Assert(false); return; }
             if (strColumnName != PluginOptions.ColumnName) { return; }
 
-            if (pe.Strings.Get(PwDefs.PasswordField) == null)
-            {
-                return;
-            }
-
             PasswordEntry = pe;
 
             GetPasswordStatus();
@@ -304,12 +299,7 @@ namespace HIBPOfflineCheck
             pe.Touched -= this.PwdTouchedHandler;
             pe.Touched += this.PwdTouchedHandler;
 
-            if (pe.Strings.Get(PluginOptions.ColumnName) == null)
-            {
-                return "";
-            }
-
-            return pe.Strings.Get(PluginOptions.ColumnName).ReadString();
+            return pe.Strings.GetSafe(PluginOptions.ColumnName).ReadString();
         }
 
         private void UpdateStatus()
