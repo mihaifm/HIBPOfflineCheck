@@ -9,7 +9,7 @@ namespace HIBPOfflineCheck
     public partial class HIBPOfflineCheckOptions : Form
     {
         private HIBPOfflineCheckExt ext;
-        private Options _options;
+        private Options options;
 
         public HIBPOfflineCheckOptions(HIBPOfflineCheckExt ext)
         {
@@ -25,15 +25,15 @@ namespace HIBPOfflineCheck
                 BannerStyle.Default, Properties.Resources.B48x48_KOrganizer, 
                 "HIBP Offline Check Options", "Manage plugin settings.");
 
-            _options = ext.LoadOptions();
+            options = ext.LoadOptions();
 
-            textBoxFileName.Text = _options.HIBPFileName;
-            textBoxColumnName.Text = _options.ColumnName;
-            textBoxSecureText.Text = _options.SecureText;
-            textBoxInsecureText.Text = _options.InsecureText;
-            checkBoxBreachCountDetails.Checked = _options.BreachCountDetails;
-            checkBoxWarningDialog.Checked = _options.WarningDialog;
-            textBoxWarningDialog.Text = _options.WarningDialogText;
+            textBoxFileName.Text = options.HIBPFileName;
+            textBoxColumnName.Text = options.ColumnName;
+            textBoxSecureText.Text = options.SecureText;
+            textBoxInsecureText.Text = options.InsecureText;
+            checkBoxBreachCountDetails.Checked = options.BreachCountDetails;
+            checkBoxWarningDialog.Checked = options.WarningDialog;
+            textBoxWarningDialog.Text = options.WarningDialogText;
             textBoxWarningDialog.Enabled = checkBoxWarningDialog.Checked;
 
             textBoxFileName.Select();
@@ -43,19 +43,19 @@ namespace HIBPOfflineCheck
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            _options.HIBPFileName = textBoxFileName.Text;
-            _options.ColumnName = textBoxColumnName.Text;
-            _options.SecureText = textBoxSecureText.Text;
-            _options.InsecureText = textBoxInsecureText.Text;
-            _options.BreachCountDetails = checkBoxBreachCountDetails.Checked;
-            _options.WarningDialog = checkBoxWarningDialog.Checked;
-            _options.WarningDialogText = textBoxWarningDialog.Text;
+            options.HIBPFileName = textBoxFileName.Text;
+            options.ColumnName = textBoxColumnName.Text;
+            options.SecureText = textBoxSecureText.Text;
+            options.InsecureText = textBoxInsecureText.Text;
+            options.BreachCountDetails = checkBoxBreachCountDetails.Checked;
+            options.WarningDialog = checkBoxWarningDialog.Checked;
+            options.WarningDialogText = textBoxWarningDialog.Text;
 
             var standardFields = PwDefs.GetStandardFields();
 
             foreach (string key in standardFields)
             {
-                if (key == _options.ColumnName)
+                if (key == options.ColumnName)
                 {
                     MessageBox.Show("Column name conflicts with KeePass columns", 
                         " Invalid column name", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -63,7 +63,7 @@ namespace HIBPOfflineCheck
                 }
             }
 
-            ext.SaveOptions(_options);
+            ext.SaveOptions(options);
             Close();
         }
 

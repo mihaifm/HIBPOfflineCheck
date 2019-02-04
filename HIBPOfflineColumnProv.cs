@@ -22,8 +22,8 @@ namespace HIBPOfflineCheck
         public IPluginHost Host { private get; set; }
         public Options PluginOptions { private get; set; }
 
-        private bool _insecureWarning;
-        private bool _passwordEdited;
+        private bool insecureWarning;
+        private bool passwordEdited;
 
         public HIBPOfflineColumnProv()
         {
@@ -104,7 +104,7 @@ namespace HIBPOfflineCheck
                             {
                                 var tokens = line.Split(':');
                                 Status = PluginOptions.InsecureText;
-                                _insecureWarning = true;
+                                insecureWarning = true;
 
                                 if (PluginOptions.BreachCountDetails)
                                 {
@@ -139,7 +139,7 @@ namespace HIBPOfflineCheck
             PwEntry pe = sender as PwEntry;
             if (e.Modified)
             {
-                _passwordEdited = true;
+                passwordEdited = true;
                 PerformCellAction(PluginOptions.ColumnName, pe);
             }
         }
@@ -148,7 +148,7 @@ namespace HIBPOfflineCheck
         {
             if (pe == null) return string.Empty;
 
-            //pe.Touched -= PwdTouchedHandler;
+            pe.Touched -= PwdTouchedHandler;
             pe.Touched += PwdTouchedHandler;
 
             return pe.Strings.GetSafe(PluginOptions.ColumnName).ReadString();
@@ -167,14 +167,14 @@ namespace HIBPOfflineCheck
 
             UIUtil.Scroll(lv, scroll, true);
 
-            if (_insecureWarning && _passwordEdited && PluginOptions.WarningDialog)
+            if (insecureWarning && passwordEdited && PluginOptions.WarningDialog)
             {
                 MessageBox.Show(PluginOptions.WarningDialogText,
                     "HIBP Offline Check", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
-            _insecureWarning = false;
-            _passwordEdited = false;
+            insecureWarning = false;
+            passwordEdited = false;
         }
 
         private void ContextMenuStrip_Opening(object sender, CancelEventArgs e)

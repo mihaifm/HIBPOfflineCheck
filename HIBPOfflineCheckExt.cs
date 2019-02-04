@@ -10,8 +10,8 @@ namespace HIBPOfflineCheck
     public sealed class HIBPOfflineCheckExt : Plugin
     {
         internal static IPluginHost Host { get; private set; }
-        private HIBPOfflineColumnProv _prov;
-        private Options _options;
+        private HIBPOfflineColumnProv prov;
+        private Options options;
 
         public override bool Initialize(IPluginHost host)
         {
@@ -20,12 +20,12 @@ namespace HIBPOfflineCheck
             if (host == null) return false;
             
             Host = host;
-            _prov = new HIBPOfflineColumnProv() { Host = host };
+            prov = new HIBPOfflineColumnProv() { Host = host };
 
-            _options = LoadOptions();
-            _prov.PluginOptions = _options;
+            options = LoadOptions();
+            prov.PluginOptions = options;
 
-            Host.ColumnProviderPool.Add(_prov);
+            Host.ColumnProviderPool.Add(prov);
 
             return true;
         }
@@ -82,8 +82,8 @@ namespace HIBPOfflineCheck
         {
             if (Host == null) return;
 
-            Host.ColumnProviderPool.Remove(_prov);
-            _prov = null;
+            Host.ColumnProviderPool.Remove(prov);
+            prov = null;
 
             Host = null;
         }
@@ -103,8 +103,8 @@ namespace HIBPOfflineCheck
                 WarningDialogText = XmlUnescape(config.GetString(Options.Names.WARNING_DIALOG_TEXT) ?? "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known")
             };
 
-            _options = options;
-            _prov.PluginOptions = options;
+            this.options = options;
+            prov.PluginOptions = options;
 
             return options;
         }
@@ -121,8 +121,8 @@ namespace HIBPOfflineCheck
             config.SetBool(Options.Names.WARNING_DIALOG, options.WarningDialog);
             config.SetString(Options.Names.WARNING_DIALOG_TEXT, XmlEscape(options.WarningDialogText));
 
-            _options = options;
-            _prov.PluginOptions = options;
+            this.options = options;
+            prov.PluginOptions = options;
         }
 
         private static string XmlEscape(string unescaped)
