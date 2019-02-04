@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HIBPOfflineCheck
+﻿namespace HIBPOfflineCheck
 {
     public class Options
     {
         public static class Names
         {
-            public static string PluginNamespace = "HIBPOfflineCheck";
-            public static string HIBPFileName = PluginNamespace + ".HIBPFileName";
-            public static string ColumnName = PluginNamespace + ".ColumnName";
-            public static string SecureText = PluginNamespace + ".SecureText";
-            public static string InsecureText = PluginNamespace + ".InsecureText";
-            public static string BreachCountDetails = PluginNamespace + ".BreachCountDetails";
-            public static string WarningDialog = PluginNamespace + ".WarningDialog";
-            public static string WarningDialogText = PluginNamespace + ".WarningDialogText";
-        }
+            private const string PLUGIN_NAMESPACE = "HIBPOfflineCheck";
 
-        public Options() { }
+            public const string HIBP_FILE_NAME = PLUGIN_NAMESPACE + ".HIBPFileName";
+            public const string COLUMN_NAME = PLUGIN_NAMESPACE + ".ColumnName";
+            public const string SECURE_TEXT = PLUGIN_NAMESPACE + ".SecureText";
+            public const string INSECURE_TEXT = PLUGIN_NAMESPACE + ".InsecureText";
+            public const string BREACH_COUNT_DETAILS = PLUGIN_NAMESPACE + ".BreachCountDetails";
+            public const string WARNING_DIALOG = PLUGIN_NAMESPACE + ".WarningDialog";
+            public const string WARNING_DIALOG_TEXT = PLUGIN_NAMESPACE + ".WarningDialogText";
+        }
 
         public string HIBPFileName { get; set; }
         public string ColumnName { get; set; }
