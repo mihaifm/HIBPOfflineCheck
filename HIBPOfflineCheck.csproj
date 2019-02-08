@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HIBPOfflineCheck</RootNamespace>
     <AssemblyName>HIBPOfflineCheck</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -53,6 +53,12 @@
     </Compile>
     <Compile Include="HIBPOfflineColumnProv.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="ProgressDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressDisplay.Designer.cs">
+      <DependentUpon>ProgressDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -63,6 +69,9 @@
   <ItemGroup>
     <EmbeddedResource Include="HIBPOfflineCheckOptions.resx">
       <DependentUpon>HIBPOfflineCheckOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressDisplay.resx">
+      <DependentUpon>ProgressDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

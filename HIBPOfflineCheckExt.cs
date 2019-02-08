@@ -94,6 +94,7 @@ namespace HIBPOfflineCheck
 
             Options options = new Options()
             {
+                CheckMode = (Options.CheckModeType) config.GetLong(Options.Names.CHECK_MODE, 0),
                 HIBPFileName = config.GetString(Options.Names.HIBP_FILE_NAME) ?? GetDefaultFileName(),
                 ColumnName = config.GetString(Options.Names.COLUMN_NAME) ?? "Have I been pwned?",
                 SecureText = config.GetString(Options.Names.SECURE_TEXT) ?? "Secure",
@@ -113,6 +114,7 @@ namespace HIBPOfflineCheck
         {
             var config = Host.CustomConfig;
 
+            config.SetLong(Options.Names.CHECK_MODE, (long) options.CheckMode);
             config.SetString(Options.Names.HIBP_FILE_NAME, options.HIBPFileName);
             config.SetString(Options.Names.COLUMN_NAME, options.ColumnName);
             config.SetString(Options.Names.SECURE_TEXT, options.SecureText);

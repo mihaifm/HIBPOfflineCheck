@@ -2,6 +2,12 @@
 {
     public class Options
     {
+        public enum CheckModeType
+        {
+            Offline = 0,
+            Online = 1
+        }
+
         public static class Names
         {
             private const string PLUGIN_NAMESPACE = "HIBPOfflineCheck";
@@ -13,6 +19,7 @@
             public const string BREACH_COUNT_DETAILS = PLUGIN_NAMESPACE + ".BreachCountDetails";
             public const string WARNING_DIALOG = PLUGIN_NAMESPACE + ".WarningDialog";
             public const string WARNING_DIALOG_TEXT = PLUGIN_NAMESPACE + ".WarningDialogText";
+            public const string CHECK_MODE = PLUGIN_NAMESPACE + ".CheckMode";
         }
 
         public string HIBPFileName { get; set; }
@@ -22,5 +29,6 @@
         public bool BreachCountDetails { get; set; }
         public bool WarningDialog { get; set; }
         public string WarningDialogText { get; set; }
+        public CheckModeType CheckMode { get; set; }
     }
 }

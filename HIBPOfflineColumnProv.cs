@@ -11,6 +11,7 @@ using KeePass.UI;
 using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Security;
+using System.Net;
 
 namespace HIBPOfflineCheck
 {
@@ -37,16 +38,71 @@ namespace HIBPOfflineCheck
             return (strColumnName == PluginOptions.ColumnName);
         }
 
-        private void GetPasswordStatus()
+        private void GetOnlineStatus()
         {
-            var latestFile = PluginOptions.HIBPFileName;
-            if (!File.Exists(latestFile))
-            {
-                Status = "HIBP file not found";
-                return;
-            }
+            var pwdSha = GetPasswordSHA();
+            var truncatedSha = pwdSha.Substring(0, 5);
 
-            string pwdShaStr;
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+            var url = "https://api.pwnedpasswords.com/range/" + truncatedSha;
+
+            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            request.UserAgent = "KeePass-HIBP-plug/1.0";
+
+            try
+            {
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        Status = "HIBP API error";
+                        return;
+                    }
+
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        string responseFromServer = reader.ReadToEnd();
+                        var lines = responseFromServer.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+                        Status = PluginOptions.SecureText;
+
+                        foreach (var line in lines)
+                        {
+                            string fullSha = truncatedSha + line;
+                            var compare = string.Compare(pwdSha, fullSha.Substring(0, pwdSha.Length), StringComparison.Ordinal);
+
+                            if (compare == 0)
+                            {
+                                var tokens = line.Split(':');
+                                Status = PluginOptions.InsecureText;
+                                insecureWarning = true;
+
+                                if (PluginOptions.BreachCountDetails)
+                                {
+                                    Status += " (opassword count: " + tokens[1].Trim() + ")";
+                                }
+
+                                break;
+                            }
+                        }
+
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+            }
+            catch
+            {
+                Status = "HIBP API error";
+            }
+        }
+
+        private string GetPasswordSHA()
+        {
             using (var sha1 = new SHA1CryptoServiceProvider())
             {
                 var context = new SprContext(PasswordEntry, Host.Database, SprCompileFlags.All);
@@ -59,7 +115,32 @@ namespace HIBPOfflineCheck
                 {
                     sb.AppendFormat("{0:X2}", b);
                 }
-                pwdShaStr = sb.ToString();
+
+                return sb.ToString();
+            }
+        }
+
+        private void GetPasswordStatus()
+        {
+            if (PluginOptions.CheckMode == Options.CheckModeType.Offline)
+            {
+                GetOfflineStatus();
+            }
+            else if (PluginOptions.CheckMode == Options.CheckModeType.Online)
+            {
+                GetOnlineStatus();
+            }
+        }
+
+        private void GetOfflineStatus()
+        {
+            string pwdShaStr = GetPasswordSHA();
+
+            var latestFile = PluginOptions.HIBPFileName;
+            if (!File.Exists(latestFile))
+            {
+                Status = "HIBP file not found";
+                return;
             }
 
             using (var fs = File.OpenRead(latestFile))
@@ -218,23 +299,40 @@ namespace HIBPOfflineCheck
             }
         }
 
-        private delegate void UpdateStatusDelegate();
-
-        private void OnMenuHIBP(object sender, EventArgs e)
+        public void PasswordCheckWorker()
         {
+            GetPasswordStatus();
+
+            if (PluginOptions.CheckMode == Options.CheckModeType.Online)
+            {
+                System.Threading.Thread.Sleep(1600);
+            }
+        }
+
+        private async void OnMenuHIBP(object sender, EventArgs e)
+        {
+            var progressDisplay = new ProgressDisplay();
+            progressDisplay.Show();
+
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
             PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
 
-            foreach (PwEntry pwEntry in selectedEntries)
+            for (int j = 0; j < selectedEntries.Length; j++)
             {
-                PasswordEntry = pwEntry;
+                PasswordEntry = selectedEntries[j];
 
-                UpdateStatusDelegate updateStatusDel = GetPasswordStatus;
-                IAsyncResult asyncRes = updateStatusDel.BeginInvoke(null, null);
-                updateStatusDel.EndInvoke(asyncRes);
-                
+                await System.Threading.Tasks.Task.Run(() => PasswordCheckWorker());
                 UpdateStatus();
+                progressDisplay.progressBar.Value = (j + 1) * 100 / selectedEntries.Length;
+
+                if (progressDisplay.UserTerminated)
+                {
+                    progressDisplay.Close();
+                    break;
+                }
             }
+
+            progressDisplay.Close();
         }
 
         private void OnMenuHIBPClear(object sender, EventArgs e)

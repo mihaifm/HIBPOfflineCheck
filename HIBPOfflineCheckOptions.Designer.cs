@@ -45,6 +45,9 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.pb_BannerImage = new System.Windows.Forms.PictureBox();
+            this.radioButtonOffline = new System.Windows.Forms.RadioButton();
+            this.radioButtonOnline = new System.Windows.Forms.RadioButton();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBoxOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_BannerImage)).BeginInit();
             this.SuspendLayout();
@@ -52,6 +55,9 @@
             // groupBoxOptions
             // 
             this.groupBoxOptions.BackColor = System.Drawing.SystemColors.Window;
+            this.groupBoxOptions.Controls.Add(this.label6);
+            this.groupBoxOptions.Controls.Add(this.radioButtonOnline);
+            this.groupBoxOptions.Controls.Add(this.radioButtonOffline);
             this.groupBoxOptions.Controls.Add(this.textBoxWarningDialog);
             this.groupBoxOptions.Controls.Add(this.label5);
             this.groupBoxOptions.Controls.Add(this.checkBoxWarningDialog);
@@ -67,7 +73,7 @@
             this.groupBoxOptions.Controls.Add(this.label1);
             this.groupBoxOptions.Location = new System.Drawing.Point(12, 75);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(564, 231);
+            this.groupBoxOptions.Size = new System.Drawing.Size(564, 259);
             this.groupBoxOptions.TabIndex = 0;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
@@ -75,7 +81,7 @@
             // textBoxWarningDialog
             // 
             this.textBoxWarningDialog.AcceptsReturn = true;
-            this.textBoxWarningDialog.Location = new System.Drawing.Point(27, 172);
+            this.textBoxWarningDialog.Location = new System.Drawing.Point(33, 197);
             this.textBoxWarningDialog.Multiline = true;
             this.textBoxWarningDialog.Name = "textBoxWarningDialog";
             this.textBoxWarningDialog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -86,7 +92,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(242, 48);
+            this.label5.Location = new System.Drawing.Point(241, 76);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(252, 13);
             this.label5.TabIndex = 11;
@@ -95,7 +101,7 @@
             // checkBoxWarningDialog
             // 
             this.checkBoxWarningDialog.AutoSize = true;
-            this.checkBoxWarningDialog.Location = new System.Drawing.Point(6, 149);
+            this.checkBoxWarningDialog.Location = new System.Drawing.Point(6, 174);
             this.checkBoxWarningDialog.Name = "checkBoxWarningDialog";
             this.checkBoxWarningDialog.Size = new System.Drawing.Size(297, 17);
             this.checkBoxWarningDialog.TabIndex = 9;
@@ -105,7 +111,7 @@
             // 
             // buttonBrowse
             // 
-            this.buttonBrowse.Location = new System.Drawing.Point(483, 17);
+            this.buttonBrowse.Location = new System.Drawing.Point(483, 45);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowse.TabIndex = 4;
@@ -118,7 +124,7 @@
             this.checkBoxBreachCountDetails.AutoSize = true;
             this.checkBoxBreachCountDetails.Checked = true;
             this.checkBoxBreachCountDetails.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBreachCountDetails.Location = new System.Drawing.Point(6, 126);
+            this.checkBoxBreachCountDetails.Location = new System.Drawing.Point(6, 151);
             this.checkBoxBreachCountDetails.Name = "checkBoxBreachCountDetails";
             this.checkBoxBreachCountDetails.Size = new System.Drawing.Size(271, 17);
             this.checkBoxBreachCountDetails.TabIndex = 8;
@@ -128,7 +134,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 101);
+            this.label4.Location = new System.Drawing.Point(6, 128);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 7;
@@ -136,7 +142,7 @@
             // 
             // textBoxInsecureText
             // 
-            this.textBoxInsecureText.Location = new System.Drawing.Point(124, 98);
+            this.textBoxInsecureText.Location = new System.Drawing.Point(122, 125);
             this.textBoxInsecureText.Name = "textBoxInsecureText";
             this.textBoxInsecureText.Size = new System.Drawing.Size(111, 20);
             this.textBoxInsecureText.TabIndex = 7;
@@ -144,7 +150,7 @@
             // 
             // textBoxSecureText
             // 
-            this.textBoxSecureText.Location = new System.Drawing.Point(124, 71);
+            this.textBoxSecureText.Location = new System.Drawing.Point(122, 99);
             this.textBoxSecureText.Name = "textBoxSecureText";
             this.textBoxSecureText.Size = new System.Drawing.Size(111, 20);
             this.textBoxSecureText.TabIndex = 6;
@@ -153,7 +159,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 74);
+            this.label3.Location = new System.Drawing.Point(6, 102);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 13);
             this.label3.TabIndex = 4;
@@ -161,7 +167,7 @@
             // 
             // textBoxColumnName
             // 
-            this.textBoxColumnName.Location = new System.Drawing.Point(124, 45);
+            this.textBoxColumnName.Location = new System.Drawing.Point(122, 73);
             this.textBoxColumnName.Name = "textBoxColumnName";
             this.textBoxColumnName.Size = new System.Drawing.Size(111, 20);
             this.textBoxColumnName.TabIndex = 5;
@@ -170,7 +176,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 22);
+            this.label2.Location = new System.Drawing.Point(6, 50);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 13);
             this.label2.TabIndex = 2;
@@ -178,7 +184,7 @@
             // 
             // textBoxFileName
             // 
-            this.textBoxFileName.Location = new System.Drawing.Point(124, 19);
+            this.textBoxFileName.Location = new System.Drawing.Point(122, 47);
             this.textBoxFileName.Name = "textBoxFileName";
             this.textBoxFileName.Size = new System.Drawing.Size(353, 20);
             this.textBoxFileName.TabIndex = 3;
@@ -186,7 +192,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 48);
+            this.label1.Location = new System.Drawing.Point(6, 76);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 0;
@@ -195,7 +201,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(419, 312);
+            this.buttonOK.Location = new System.Drawing.Point(419, 342);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 2;
@@ -207,7 +213,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(501, 312);
+            this.buttonCancel.Location = new System.Drawing.Point(501, 342);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -223,6 +229,38 @@
             this.pb_BannerImage.TabIndex = 3;
             this.pb_BannerImage.TabStop = false;
             // 
+            // radioButtonOffline
+            // 
+            this.radioButtonOffline.AutoSize = true;
+            this.radioButtonOffline.Checked = true;
+            this.radioButtonOffline.Location = new System.Drawing.Point(124, 24);
+            this.radioButtonOffline.Name = "radioButtonOffline";
+            this.radioButtonOffline.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonOffline.TabIndex = 13;
+            this.radioButtonOffline.TabStop = true;
+            this.radioButtonOffline.Text = "Offline";
+            this.radioButtonOffline.UseVisualStyleBackColor = true;
+            this.radioButtonOffline.CheckedChanged += new System.EventHandler(this.radioButtonOffline_CheckedChanged);
+            // 
+            // radioButtonOnline
+            // 
+            this.radioButtonOnline.AutoSize = true;
+            this.radioButtonOnline.Location = new System.Drawing.Point(222, 24);
+            this.radioButtonOnline.Name = "radioButtonOnline";
+            this.radioButtonOnline.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonOnline.TabIndex = 14;
+            this.radioButtonOnline.Text = "Online";
+            this.radioButtonOnline.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 26);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(70, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Check mode:";
+            // 
             // HIBPOfflineCheckOptions
             // 
             this.AcceptButton = this.buttonOK;
@@ -230,7 +268,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(588, 346);
+            this.ClientSize = new System.Drawing.Size(588, 376);
             this.Controls.Add(this.pb_BannerImage);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -269,5 +307,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pb_BannerImage;
         private System.Windows.Forms.TextBox textBoxWarningDialog;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.RadioButton radioButtonOnline;
+        private System.Windows.Forms.RadioButton radioButtonOffline;
     }
 }
