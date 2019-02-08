@@ -3,7 +3,6 @@ using KeePass.App;
 using KeePassLib;
 using System;
 using System.Windows.Forms;
-using static HIBPOfflineCheck.Options;
 
 namespace HIBPOfflineCheck
 {
@@ -28,8 +27,8 @@ namespace HIBPOfflineCheck
 
             options = ext.LoadOptions();
 
-            radioButtonOffline.Checked = (options.CheckMode == CheckModeType.Offline);
-            radioButtonOnline.Checked = (options.CheckMode == CheckModeType.Online);
+            radioButtonOffline.Checked = (options.CheckMode == Options.CheckModeType.Offline);
+            radioButtonOnline.Checked = (options.CheckMode == Options.CheckModeType.Online);
             textBoxFileName.Text = options.HIBPFileName;
             textBoxColumnName.Text = options.ColumnName;
             textBoxSecureText.Text = options.SecureText;
@@ -46,7 +45,7 @@ namespace HIBPOfflineCheck
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            options.CheckMode = radioButtonOffline.Checked ? CheckModeType.Offline : CheckModeType.Online;
+            options.CheckMode = radioButtonOffline.Checked ? Options.CheckModeType.Offline : Options.CheckModeType.Online;
             options.HIBPFileName = textBoxFileName.Text;
             options.ColumnName = textBoxColumnName.Text;
             options.SecureText = textBoxSecureText.Text;

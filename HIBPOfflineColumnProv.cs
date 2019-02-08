@@ -31,7 +31,10 @@ namespace HIBPOfflineCheck
             HIBPOfflineCheckExt.Host.MainWindow.EntryContextMenu.Opening += ContextMenuStrip_Opening;
         }
 
-        public override string[] ColumnNames => new [] { PluginOptions.ColumnName };
+        public override string[] ColumnNames
+        {
+            get { return new string[] { PluginOptions.ColumnName }; }
+        }
 
         public override bool SupportsCellAction(string strColumnName)
         {
