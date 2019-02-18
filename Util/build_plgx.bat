@@ -18,7 +18,7 @@ xcopy /Y %PluginRoot%\Resources\Nuvola\B48x48_KOrganizer.png plgx\Resources\Nuvo
 xcopy /Y %PluginRoot%\Properties\Resources.Designer.cs plgx\Properties\
 xcopy /Y %PluginRoot%\Properties\Resources.resx plgx\Properties\
 
-%KeePassExe% --plgx-create "%BuildPath%plgx" --plgx-prereq-net:4.5
+%KeePassExe% --plgx-create "%BuildPath%plgx"
 
 move /Y "%BuildPath%plgx.plgx" %PluginRoot%\HIBPOfflineCheck.plgx
 

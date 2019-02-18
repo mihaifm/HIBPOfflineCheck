@@ -86,7 +86,7 @@ namespace HIBPOfflineCheck
 
                                 if (PluginOptions.BreachCountDetails)
                                 {
-                                    Status += " (opassword count: " + tokens[1].Trim() + ")";
+                                    Status += " (password count: " + tokens[1].Trim() + ")";
                                 }
 
                                 break;
