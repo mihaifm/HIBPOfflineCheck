@@ -24,7 +24,8 @@ namespace HIBPOfflineCheck
         public Options PluginOptions { private get; set; }
 
         private bool insecureWarning;
-        private bool passwordEdited;
+        private bool formEdited;
+        private bool receivedStatus;
 
         public HIBPOfflineColumnProv()
         {
@@ -133,6 +134,8 @@ namespace HIBPOfflineCheck
             {
                 GetOnlineStatus();
             }
+
+            receivedStatus = true;
         }
 
         private void GetOfflineStatus()
@@ -215,7 +218,8 @@ namespace HIBPOfflineCheck
             PasswordEntry = pe;
 
             GetPasswordStatus();
-            UpdateStatus();
+
+            TouchEntry(PasswordEntry); 
         }
 
         private void PwdTouchedHandler(object sender, ObjectTouchedEventArgs e)
@@ -223,8 +227,31 @@ namespace HIBPOfflineCheck
             PwEntry pe = sender as PwEntry;
             if (e.Modified)
             {
-                passwordEdited = true;
-                PerformCellAction(PluginOptions.ColumnName, pe);
+                if (receivedStatus == false)
+                {
+                    PasswordEntry = pe;
+                    GetPasswordStatus();
+                    formEdited = true;
+                }
+
+                UpdateStatus();
+            }
+        }
+
+        private void TouchEntry(PwEntry pe)
+        {
+            string currentStatus = null;
+
+            var protectedStatus = pe.Strings.Get(PluginOptions.ColumnName);
+
+            if (protectedStatus != null)
+            {
+                currentStatus = pe.Strings.Get(PluginOptions.ColumnName).ReadString();
+            }
+
+            if (currentStatus == null || currentStatus != Status)
+            {
+                pe.Touch(true);
             }
         }
 
@@ -251,14 +278,15 @@ namespace HIBPOfflineCheck
 
             UIUtil.Scroll(lv, scroll, true);
 
-            if (insecureWarning && passwordEdited && PluginOptions.WarningDialog)
+            if (insecureWarning && formEdited && PluginOptions.WarningDialog)
             {
                 MessageBox.Show(PluginOptions.WarningDialogText,
                     "HIBP Offline Check", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             insecureWarning = false;
-            passwordEdited = false;
+            formEdited = false;
+            receivedStatus = false;
         }
 
         private void ContextMenuStrip_Opening(object sender, CancelEventArgs e)
@@ -325,7 +353,7 @@ namespace HIBPOfflineCheck
                 PasswordEntry = selectedEntries[j];
 
                 await System.Threading.Tasks.Task.Run(() => PasswordCheckWorker());
-                UpdateStatus();
+                TouchEntry(PasswordEntry);
                 progressDisplay.progressBar.Value = (j + 1) * 100 / selectedEntries.Length;
 
                 if (progressDisplay.UserTerminated)
