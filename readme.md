@@ -77,7 +77,7 @@ the password status. Editing an entry will update the status.
 
 --------------------------------------------------------------------------------------------
 
-* __Entries are checked automatically after being updated__
+* __Entries are checked automatically after being created or updated__
 
 ![image](https://user-images.githubusercontent.com/981184/46236364-11b6e400-c387-11e8-8034-416c7c3ee492.png)
 

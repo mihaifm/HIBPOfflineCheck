@@ -378,5 +378,19 @@ namespace HIBPOfflineCheck
 
             mainForm.UpdateUI(false, null, false, null, true, null, true);
         }
+
+        public void EntrySaved(object sender, EventArgs e)
+        {
+            PwEntryForm form = sender as PwEntryForm;
+
+            form.EntryRef.Touched -= PwdTouchedHandler;
+            form.EntryRef.Touched += PwdTouchedHandler;
+
+            //only touch newly created entries, updated entries are touched by KeePass
+            if (form.EntryRef.UsageCount <= 1)
+            {
+                form.EntryRef.Touch(true);
+            }
+        }
     }
 }

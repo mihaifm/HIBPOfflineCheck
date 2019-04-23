@@ -4,6 +4,8 @@ using KeePass.Plugins;
 using System.IO;
 using KeePassLib.Utility;
 using KeePass.Util;
+using KeePass.UI;
+using KeePass.Forms;
 
 namespace HIBPOfflineCheck
 {
@@ -12,6 +14,8 @@ namespace HIBPOfflineCheck
         internal static IPluginHost Host { get; private set; }
         private HIBPOfflineColumnProv prov;
         private Options options;
+
+        private EventHandler<GwmWindowEventArgs> windowAddedHandler;
 
         public override bool Initialize(IPluginHost host)
         {
@@ -27,7 +31,18 @@ namespace HIBPOfflineCheck
 
             Host.ColumnProviderPool.Add(prov);
 
+            windowAddedHandler = new EventHandler<GwmWindowEventArgs>(WindowAddedHandler);
+            GlobalWindowManager.WindowAdded += windowAddedHandler;
+
             return true;
+        }
+
+        public void WindowAddedHandler(object sender, GwmWindowEventArgs e)
+        {
+            PwEntryForm form = e.Form as PwEntryForm;
+            if (form == null) return;
+
+            form.EntrySaved += prov.EntrySaved;
         }
 
         public override ToolStripMenuItem GetMenuItem(PluginMenuType t)
