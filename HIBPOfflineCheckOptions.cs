@@ -17,6 +17,34 @@ namespace HIBPOfflineCheck
             InitializeComponent();
         }
 
+        private bool CommitOptions()
+        {
+            options.CheckMode = radioButtonOffline.Checked ? Options.CheckModeType.Offline : Options.CheckModeType.Online;
+            options.HIBPFileName = textBoxFileName.Text;
+            options.ColumnName = textBoxColumnName.Text;
+            options.SecureText = textBoxSecureText.Text;
+            options.InsecureText = textBoxInsecureText.Text;
+            options.BreachCountDetails = checkBoxBreachCountDetails.Checked;
+            options.WarningDialog = checkBoxWarningDialog.Checked;
+            options.WarningDialogText = textBoxWarningDialog.Text;
+
+            var standardFields = PwDefs.GetStandardFields();
+
+            foreach (string key in standardFields)
+            {
+                if (key == options.ColumnName)
+                {
+                    MessageBox.Show("Column name conflicts with KeePass columns",
+                        " Invalid column name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+
+            ext.SaveOptions(options);
+
+            return true;
+        }
+
         private void HIBPOfflineCheckOptions_Load(object sender, EventArgs e)
         {
             Icon = AppIcons.Default;
@@ -45,29 +73,10 @@ namespace HIBPOfflineCheck
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            options.CheckMode = radioButtonOffline.Checked ? Options.CheckModeType.Offline : Options.CheckModeType.Online;
-            options.HIBPFileName = textBoxFileName.Text;
-            options.ColumnName = textBoxColumnName.Text;
-            options.SecureText = textBoxSecureText.Text;
-            options.InsecureText = textBoxInsecureText.Text;
-            options.BreachCountDetails = checkBoxBreachCountDetails.Checked;
-            options.WarningDialog = checkBoxWarningDialog.Checked;
-            options.WarningDialogText = textBoxWarningDialog.Text;
-
-            var standardFields = PwDefs.GetStandardFields();
-
-            foreach (string key in standardFields)
+            if (CommitOptions())
             {
-                if (key == options.ColumnName)
-                {
-                    MessageBox.Show("Column name conflicts with KeePass columns", 
-                        " Invalid column name", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                Close();
             }
-
-            ext.SaveOptions(options);
-            Close();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -94,6 +103,22 @@ namespace HIBPOfflineCheck
         private void radioButtonOffline_CheckedChanged(object sender, EventArgs e)
         {
             textBoxFileName.Enabled = radioButtonOffline.Checked;
+        }
+
+        private void buttonCheckAll_Click(object sender, EventArgs e)
+        {
+            if (CommitOptions())
+            {
+                ext.Prov.CheckAll();
+            }
+        }
+
+        private void buttonClearAll_Click(object sender, EventArgs e)
+        {
+            if (CommitOptions())
+            {
+                ext.Prov.ClearAll();
+            }
         }
     }
 }

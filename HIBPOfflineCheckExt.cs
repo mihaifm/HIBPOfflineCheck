@@ -16,6 +16,7 @@ namespace HIBPOfflineCheck
         private Options options;
 
         private EventHandler<GwmWindowEventArgs> windowAddedHandler;
+        public HIBPOfflineColumnProv Prov { get { return prov; } }
 
         public override bool Initialize(IPluginHost host)
         {

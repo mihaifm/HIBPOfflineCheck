@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.radioButtonOnline = new System.Windows.Forms.RadioButton();
+            this.radioButtonOffline = new System.Windows.Forms.RadioButton();
             this.textBoxWarningDialog = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.checkBoxWarningDialog = new System.Windows.Forms.CheckBox();
@@ -45,11 +48,12 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.pb_BannerImage = new System.Windows.Forms.PictureBox();
-            this.radioButtonOffline = new System.Windows.Forms.RadioButton();
-            this.radioButtonOnline = new System.Windows.Forms.RadioButton();
-            this.label6 = new System.Windows.Forms.Label();
+            this.groupBoxActions = new System.Windows.Forms.GroupBox();
+            this.buttonCheckAll = new System.Windows.Forms.Button();
+            this.buttonClearAll = new System.Windows.Forms.Button();
             this.groupBoxOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_BannerImage)).BeginInit();
+            this.groupBoxActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxOptions
@@ -71,12 +75,44 @@
             this.groupBoxOptions.Controls.Add(this.label2);
             this.groupBoxOptions.Controls.Add(this.textBoxFileName);
             this.groupBoxOptions.Controls.Add(this.label1);
-            this.groupBoxOptions.Location = new System.Drawing.Point(12, 75);
+            this.groupBoxOptions.Location = new System.Drawing.Point(12, 125);
             this.groupBoxOptions.Name = "groupBoxOptions";
             this.groupBoxOptions.Size = new System.Drawing.Size(564, 259);
             this.groupBoxOptions.TabIndex = 0;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 26);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(70, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Check mode:";
+            // 
+            // radioButtonOnline
+            // 
+            this.radioButtonOnline.AutoSize = true;
+            this.radioButtonOnline.Location = new System.Drawing.Point(222, 24);
+            this.radioButtonOnline.Name = "radioButtonOnline";
+            this.radioButtonOnline.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonOnline.TabIndex = 14;
+            this.radioButtonOnline.Text = "Online";
+            this.radioButtonOnline.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonOffline
+            // 
+            this.radioButtonOffline.AutoSize = true;
+            this.radioButtonOffline.Checked = true;
+            this.radioButtonOffline.Location = new System.Drawing.Point(124, 24);
+            this.radioButtonOffline.Name = "radioButtonOffline";
+            this.radioButtonOffline.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonOffline.TabIndex = 13;
+            this.radioButtonOffline.TabStop = true;
+            this.radioButtonOffline.Text = "Offline";
+            this.radioButtonOffline.UseVisualStyleBackColor = true;
+            this.radioButtonOffline.CheckedChanged += new System.EventHandler(this.radioButtonOffline_CheckedChanged);
             // 
             // textBoxWarningDialog
             // 
@@ -201,7 +237,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(419, 342);
+            this.buttonOK.Location = new System.Drawing.Point(420, 392);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 2;
@@ -213,7 +249,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(501, 342);
+            this.buttonCancel.Location = new System.Drawing.Point(501, 392);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -229,37 +265,36 @@
             this.pb_BannerImage.TabIndex = 3;
             this.pb_BannerImage.TabStop = false;
             // 
-            // radioButtonOffline
+            // groupBoxActions
             // 
-            this.radioButtonOffline.AutoSize = true;
-            this.radioButtonOffline.Checked = true;
-            this.radioButtonOffline.Location = new System.Drawing.Point(124, 24);
-            this.radioButtonOffline.Name = "radioButtonOffline";
-            this.radioButtonOffline.Size = new System.Drawing.Size(55, 17);
-            this.radioButtonOffline.TabIndex = 13;
-            this.radioButtonOffline.TabStop = true;
-            this.radioButtonOffline.Text = "Offline";
-            this.radioButtonOffline.UseVisualStyleBackColor = true;
-            this.radioButtonOffline.CheckedChanged += new System.EventHandler(this.radioButtonOffline_CheckedChanged);
+            this.groupBoxActions.Controls.Add(this.buttonClearAll);
+            this.groupBoxActions.Controls.Add(this.buttonCheckAll);
+            this.groupBoxActions.Location = new System.Drawing.Point(12, 66);
+            this.groupBoxActions.Name = "groupBoxActions";
+            this.groupBoxActions.Size = new System.Drawing.Size(564, 53);
+            this.groupBoxActions.TabIndex = 4;
+            this.groupBoxActions.TabStop = false;
+            this.groupBoxActions.Text = "Actions";
             // 
-            // radioButtonOnline
+            // buttonCheckAll
             // 
-            this.radioButtonOnline.AutoSize = true;
-            this.radioButtonOnline.Location = new System.Drawing.Point(222, 24);
-            this.radioButtonOnline.Name = "radioButtonOnline";
-            this.radioButtonOnline.Size = new System.Drawing.Size(55, 17);
-            this.radioButtonOnline.TabIndex = 14;
-            this.radioButtonOnline.Text = "Online";
-            this.radioButtonOnline.UseVisualStyleBackColor = true;
+            this.buttonCheckAll.Location = new System.Drawing.Point(6, 19);
+            this.buttonCheckAll.Name = "buttonCheckAll";
+            this.buttonCheckAll.Size = new System.Drawing.Size(138, 23);
+            this.buttonCheckAll.TabIndex = 0;
+            this.buttonCheckAll.Text = "Check All Passwords";
+            this.buttonCheckAll.UseVisualStyleBackColor = true;
+            this.buttonCheckAll.Click += new System.EventHandler(this.buttonCheckAll_Click);
             // 
-            // label6
+            // buttonClearAll
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 26);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 13);
-            this.label6.TabIndex = 15;
-            this.label6.Text = "Check mode:";
+            this.buttonClearAll.Location = new System.Drawing.Point(150, 19);
+            this.buttonClearAll.Name = "buttonClearAll";
+            this.buttonClearAll.Size = new System.Drawing.Size(127, 23);
+            this.buttonClearAll.TabIndex = 1;
+            this.buttonClearAll.Text = "Clear Status";
+            this.buttonClearAll.UseVisualStyleBackColor = true;
+            this.buttonClearAll.Click += new System.EventHandler(this.buttonClearAll_Click);
             // 
             // HIBPOfflineCheckOptions
             // 
@@ -268,7 +303,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(588, 376);
+            this.ClientSize = new System.Drawing.Size(588, 427);
+            this.Controls.Add(this.groupBoxActions);
             this.Controls.Add(this.pb_BannerImage);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -279,11 +315,12 @@
             this.Name = "HIBPOfflineCheckOptions";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "HIBP Offline Check Options";
+            this.Text = "HIBP Offline Check";
             this.Load += new System.EventHandler(this.HIBPOfflineCheckOptions_Load);
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_BannerImage)).EndInit();
+            this.groupBoxActions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -310,5 +347,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.RadioButton radioButtonOnline;
         private System.Windows.Forms.RadioButton radioButtonOffline;
+        private System.Windows.Forms.GroupBox groupBoxActions;
+        private System.Windows.Forms.Button buttonClearAll;
+        private System.Windows.Forms.Button buttonCheckAll;
     }
 }

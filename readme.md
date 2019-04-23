@@ -4,20 +4,18 @@
 
 This is a __[KeePass](https://keepass.info/)__ plugin for __[Have I been pwned?](https://haveibeenpwned.com/)__.    
 It can perform both __offline__ and __online__ checks against the password breach list for any selected password entry.    
-Double click the plugin column to get an instant status check, or use the right click menu to perform the same check 
-for all selected passwords.
+Double click the plugin column to get an instant status check, or use the right click menu to perform the same check for all selected passwords.
 
 ## Motivation
 
 [Have I been pwned?](https://haveibeenpwned.com/) is an excellent tool for checking leaked passwords.
-While it does provide an API for securely checking the passwords online, some bits of a hashed password still need
-to be sent to the service when performing this type of check.
+While it does provide an API for securely checking the passwords online, some bits of a hashed password still need to be sent to the service when performing this type of check.
 
-This plugin offers the alternative of an offline check, by using the downloadable file provided by [Have I been pwned?](https://haveibeenpwned.com/).
-Online check mode is also implemented using the [k-anonimity](https://haveibeenpwned.com/API/v2#SearchingPwnedPasswordsByRange) model required by the HIBP public API.
+This plugin offers the alternative of an offline check, by using the downloadable file provided by [Have I been pwned?](https://haveibeenpwned.com/).    
 
-The plugin adds a new column to KeePass. When double-clicking the column for a specific entry, the sha1 hash is calculated for the password,
-which is then searched in the file. A status will be displayed on the column for that specific password.
+Online check mode is also provided as an option, being implemented using the [k-anonimity](https://haveibeenpwned.com/API/v2#SearchingPwnedPasswordsByRange) model required by the HIBP public API.
+
+The plugin adds a new column to KeePass. When double-clicking the column for a specific entry, the sha1 hash is calculated for the password, which is then searched in the file. A status will be displayed on the column for that specific password.
 
 ## Features
 
@@ -27,6 +25,7 @@ which is then searched in the file. A status will be displayed on the column for
 - the status (Pwned or Secure) is saved in the KeePass database and will be retrieved when reopening the app, and updated if the password entry changes
 - each password is individually checked only on user request
 - multiple passwords can be checked in bulk by using the right click menu (under "Selected Entries")
+- option to check all passwords in the database
 
 ## Prerequisites
 
@@ -55,8 +54,8 @@ Downloading the file is not required if Online mode is selected in the options, 
 
 * __Enable__
 
-In KeePass, enable the plugin column in `View->Configure Columns->Provided by Plugins`. Double clicking the "Have I been pwned?" column for any entry will display
-the password status. Editing an entry will update the status.
+In KeePass, enable the plugin column in `View -> Configure Columns -> Provided by Plugins`.     
+Double clicking the `Have I been pwned?` column for any entry will display the password status. The status is also automatically checked when creating or updating an entry.
 
 --------------------------------------------------------------------------------------------
 
@@ -73,22 +72,23 @@ the password status. Editing an entry will update the status.
     
 --------------------------------------------------------------------------------------------
 
-* __Check all the passwords in the database__ using [this simple method](https://github.com/mihaifm/HIBPOfflineCheck/issues/5#issuecomment-456998959): Search for nothing in the search box, this will display all your passwords. Select all (ctrl+a) -> right click -> Selected Entries -> Have I been pwned?
+* __Check all the passwords in the database__
+
+`Tools -> HIBP Offline Check -> Check All Passwords`
 
 --------------------------------------------------------------------------------------------
 
-* __Entries are checked automatically after being created or updated__
+* __Automatic check for new or updated entries__
 
-![image](https://user-images.githubusercontent.com/981184/46236364-11b6e400-c387-11e8-8034-416c7c3ee492.png)
-
+Newly created and updated entries are automatically checked. There is also an option to display a warning after creating an insecure password. 
 
 ## Configuration
 
 To configure the plugin, open `Tools -> HIBP Offline Check...`
 
-![image](https://user-images.githubusercontent.com/981184/52479781-73e3e900-2bb2-11e9-90b1-4a6955c9484e.png)
+![image](https://user-images.githubusercontent.com/981184/56583062-5cc56c80-65e1-11e9-826c-aed79ab7607f.png)
 
-Note that after changing the `Column name`, a new column will be created with the new name and needs to be enabled under `View->Configure Columns->Provided by Plugins`. Before changing the column name, it is recommended that you clear the status of all entries (using `right click->Selected Entries->Clear pwned status`). To make sure that you no longer have entries under the old column name, see if it still appears under `View->Configure Columns->Custom Fields`.
+Note that after changing the `Column name`, a new column will be created with the new name and needs to be enabled under `View -> Configure Columns -> Provided by Plugins`. Before changing the column name, it is recommended that you clear the status of all entries (`Tools -> HIBP Offline Check -> Clear Status`).
 
 Enjoy!
 

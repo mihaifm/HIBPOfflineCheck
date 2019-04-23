@@ -12,6 +12,7 @@ using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Security;
 using System.Net;
+using KeePassLib.Collections;
 
 namespace HIBPOfflineCheck
 {
@@ -251,6 +252,9 @@ namespace HIBPOfflineCheck
 
             if (currentStatus == null || currentStatus != Status)
             {
+                pe.Touched -= PwdTouchedHandler;
+                pe.Touched += PwdTouchedHandler;
+
                 pe.Touch(true);
             }
         }
@@ -338,6 +342,54 @@ namespace HIBPOfflineCheck
             {
                 System.Threading.Thread.Sleep(1600);
             }
+        }
+
+        public async void CheckAll()
+        {
+            var progressDisplay = new ProgressDisplay();
+            progressDisplay.Show();
+
+            var allEntries = new PwObjectList<PwEntry>();
+            Host.Database.RootGroup.SearchEntries(SearchParameters.None, allEntries);
+
+            for (uint i = 0; i < allEntries.UCount; i++)
+            {
+                PasswordEntry = allEntries.GetAt(i);
+
+                await System.Threading.Tasks.Task.Run(() => PasswordCheckWorker());
+                TouchEntry(PasswordEntry);
+                progressDisplay.progressBar.Value = ((int) i + 1) * 100 / ((int) allEntries.UCount);
+
+                if (progressDisplay.UserTerminated)
+                {
+                    progressDisplay.Close();
+                    break;
+                }
+            }
+
+            progressDisplay.Close();
+        }
+
+        public void ClearAll()
+        {
+            DialogResult dialog = MessageBox.Show("This will remove the HIBP status for all entries in the database. Continue?",
+                String.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+            if (dialog == DialogResult.Cancel)
+                return;
+
+            MainForm mainForm = Host.MainWindow;
+
+            PwObjectList<PwEntry> allEntries = new PwObjectList<PwEntry>();
+            Host.Database.RootGroup.SearchEntries(SearchParameters.None, allEntries);
+
+            for (uint i = 0; i < allEntries.UCount; i++)
+            {
+                var pwEntry = allEntries.GetAt(i);
+                pwEntry.Strings.Remove(PluginOptions.ColumnName);
+            }
+
+            mainForm.UpdateUI(false, null, false, null, true, null, true);
         }
 
         private async void OnMenuHIBP(object sender, EventArgs e)
