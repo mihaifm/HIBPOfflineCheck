@@ -65,11 +65,10 @@ Double clicking the `Have I been pwned?` column for any entry will display the p
     
 --------------------------------------------------------------------------------------------
 
-* __Select multiple entries__, right click -> Selected Entries -> Have I been pwned?
+* __Select multiple entries__, `right click -> Have I been pwned?`
     
-![image](https://user-images.githubusercontent.com/981184/47184669-f1e66080-d333-11e8-8b14-01808a36706a.png)
+![image](https://user-images.githubusercontent.com/981184/59965011-6dc32900-9511-11e9-9049-0c458802aebf.png)
         
-    
 --------------------------------------------------------------------------------------------
 
 * __Check all the passwords in the database__

@@ -28,11 +28,6 @@ namespace HIBPOfflineCheck
         private bool formEdited;
         private bool receivedStatus;
 
-        public HIBPOfflineColumnProv()
-        {
-            HIBPOfflineCheckExt.Host.MainWindow.EntryContextMenu.Opening += ContextMenuStrip_Opening;
-        }
-
         public override string[] ColumnNames
         {
             get { return new string[] { PluginOptions.ColumnName }; }
@@ -293,47 +288,6 @@ namespace HIBPOfflineCheck
             receivedStatus = false;
         }
 
-        private void ContextMenuStrip_Opening(object sender, CancelEventArgs e)
-        {
-            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
-            ToolStripItem[] items = mainForm.EntryContextMenu.Items.Find("m_ctxEntryMassModify", true);
-
-            if (items.Length > 0)
-            {
-                ToolStripMenuItem ctxEntryMassModify = items[0] as ToolStripMenuItem;
-
-                if (ctxEntryMassModify != null)
-                {
-                    ToolStripItem[] hibpItems = ctxEntryMassModify.DropDownItems.Find("m_ctxEntryHIBP", true);
-
-                    if (hibpItems.Length == 0)
-                    {
-                        ToolStripSeparator separator = new ToolStripSeparator();
-                        ctxEntryMassModify.DropDownItems.Add(separator);
-
-                        ToolStripMenuItem hibpMenuItem = new ToolStripMenuItem()
-                        {
-                            Name = "m_ctxEntryHIBP",
-                            Text = "Have I been pwned?"
-                        };
-
-                        hibpMenuItem.Click += OnMenuHIBP;
-                        ctxEntryMassModify.DropDownItems.Add(hibpMenuItem);
-
-                        ToolStripMenuItem hibpClearMenuItem = new ToolStripMenuItem()
-                        {
-                            Name = "m_ctxEntryHIBPClear",
-                            Text = "Clear pwned status"
-                        };
-
-                        hibpClearMenuItem.Click += OnMenuHIBPClear;
-                        ctxEntryMassModify.DropDownItems.Add(hibpClearMenuItem);
-
-                    }
-                }
-            }
-        }
-
         public void PasswordCheckWorker()
         {
             GetPasswordStatus();
@@ -392,7 +346,7 @@ namespace HIBPOfflineCheck
             mainForm.UpdateUI(false, null, false, null, true, null, true);
         }
 
-        private async void OnMenuHIBP(object sender, EventArgs e)
+        public async void OnMenuHIBP(object sender, EventArgs e)
         {
             var progressDisplay = new ProgressDisplay();
             progressDisplay.Show();
@@ -418,7 +372,7 @@ namespace HIBPOfflineCheck
             progressDisplay.Close();
         }
 
-        private void OnMenuHIBPClear(object sender, EventArgs e)
+        public void OnMenuHIBPClear(object sender, EventArgs e)
         {
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
             PwEntry[] selectedEntries = mainForm.GetSelectedEntries();

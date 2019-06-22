@@ -35,6 +35,8 @@ namespace HIBPOfflineCheck
             windowAddedHandler = new EventHandler<GwmWindowEventArgs>(WindowAddedHandler);
             GlobalWindowManager.WindowAdded += windowAddedHandler;
 
+            CreateMenuItems();
+
             return true;
         }
 
@@ -62,6 +64,41 @@ namespace HIBPOfflineCheck
         {
             HIBPOfflineCheckOptions optionsForm = new HIBPOfflineCheckOptions(this);
             optionsForm.Show();
+        }
+
+        private void CreateMenuItems()
+        {
+            string hibpMenuItemText = "Have I been pwned?";
+            string clearMenuItemText = "Clear pwned status";
+
+            ContextMenuStrip entryContextMenu = Host.MainWindow.EntryContextMenu;
+
+            entryContextMenu.Items.Add(new ToolStripSeparator());
+
+            ToolStripMenuItem hibpCtxMenuItem = new ToolStripMenuItem(hibpMenuItemText);
+            hibpCtxMenuItem.Click += new EventHandler(prov.OnMenuHIBP);
+            entryContextMenu.Items.Add(hibpCtxMenuItem);
+
+            ToolStripMenuItem hibpClearCtxMenuItem = new ToolStripMenuItem(clearMenuItemText);
+            hibpClearCtxMenuItem.Click += new EventHandler(prov.OnMenuHIBPClear);
+            entryContextMenu.Items.Add(hibpClearCtxMenuItem);
+
+            var m_menuEntry = Host.MainWindow.MainMenu.Items.Find("m_menuEntry", true);
+
+            if (m_menuEntry.Length > 0)
+            {
+                ToolStripMenuItem entryMenu = m_menuEntry[0] as ToolStripMenuItem;
+
+                entryMenu.DropDownItems.Add(new ToolStripSeparator());
+
+                ToolStripMenuItem hibpMenuItem = new ToolStripMenuItem(hibpMenuItemText);
+                hibpMenuItem.Click += new EventHandler(prov.OnMenuHIBP);
+                entryMenu.DropDownItems.Add(hibpMenuItem);
+
+                ToolStripMenuItem hibpClearMenuItem = new ToolStripMenuItem(clearMenuItemText);
+                hibpClearMenuItem.Click += new EventHandler(prov.OnMenuHIBPClear);
+                entryMenu.DropDownItems.Add(hibpClearMenuItem);
+            }
         }
 
         private static string GetDefaultFileName()
