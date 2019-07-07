@@ -45,6 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitStorage.cs" />
+    <Compile Include="BloomFilter.cs" />
+    <Compile Include="CreateBloomFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateBloomFilter.Designer.cs">
+      <DependentUpon>CreateBloomFilter.cs</DependentUpon>
+    </Compile>
     <Compile Include="HIBPOfflineCheckExt.cs" />
     <Compile Include="HIBPOfflineCheckOptions.cs">
       <SubType>Form</SubType>
@@ -68,6 +76,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CreateBloomFilter.resx">
+      <DependentUpon>CreateBloomFilter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HIBPOfflineCheckOptions.resx">
       <DependentUpon>HIBPOfflineCheckOptions.cs</DependentUpon>
     </EmbeddedResource>

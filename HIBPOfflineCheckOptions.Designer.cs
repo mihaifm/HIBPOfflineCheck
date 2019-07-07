@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
+            this.buttonCreateBloom = new System.Windows.Forms.Button();
+            this.buttonBrowseBloom = new System.Windows.Forms.Button();
+            this.textBoxBloomFilter = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.radioButtonBloom = new System.Windows.Forms.RadioButton();
             this.label6 = new System.Windows.Forms.Label();
             this.radioButtonOnline = new System.Windows.Forms.RadioButton();
             this.radioButtonOffline = new System.Windows.Forms.RadioButton();
@@ -49,8 +54,8 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.pb_BannerImage = new System.Windows.Forms.PictureBox();
             this.groupBoxActions = new System.Windows.Forms.GroupBox();
-            this.buttonCheckAll = new System.Windows.Forms.Button();
             this.buttonClearAll = new System.Windows.Forms.Button();
+            this.buttonCheckAll = new System.Windows.Forms.Button();
             this.groupBoxOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_BannerImage)).BeginInit();
             this.groupBoxActions.SuspendLayout();
@@ -59,6 +64,11 @@
             // groupBoxOptions
             // 
             this.groupBoxOptions.BackColor = System.Drawing.SystemColors.Window;
+            this.groupBoxOptions.Controls.Add(this.buttonCreateBloom);
+            this.groupBoxOptions.Controls.Add(this.buttonBrowseBloom);
+            this.groupBoxOptions.Controls.Add(this.textBoxBloomFilter);
+            this.groupBoxOptions.Controls.Add(this.label7);
+            this.groupBoxOptions.Controls.Add(this.radioButtonBloom);
             this.groupBoxOptions.Controls.Add(this.label6);
             this.groupBoxOptions.Controls.Add(this.radioButtonOnline);
             this.groupBoxOptions.Controls.Add(this.radioButtonOffline);
@@ -77,15 +87,63 @@
             this.groupBoxOptions.Controls.Add(this.label1);
             this.groupBoxOptions.Location = new System.Drawing.Point(12, 125);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(564, 259);
+            this.groupBoxOptions.Size = new System.Drawing.Size(564, 336);
             this.groupBoxOptions.TabIndex = 0;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
             // 
+            // buttonCreateBloom
+            // 
+            this.buttonCreateBloom.Location = new System.Drawing.Point(122, 99);
+            this.buttonCreateBloom.Name = "buttonCreateBloom";
+            this.buttonCreateBloom.Size = new System.Drawing.Size(138, 23);
+            this.buttonCreateBloom.TabIndex = 20;
+            this.buttonCreateBloom.Text = "Generate Bloom Filter...";
+            this.buttonCreateBloom.UseVisualStyleBackColor = true;
+            this.buttonCreateBloom.Click += new System.EventHandler(this.buttonCreateBloom_Click);
+            // 
+            // buttonBrowseBloom
+            // 
+            this.buttonBrowseBloom.Location = new System.Drawing.Point(483, 71);
+            this.buttonBrowseBloom.Name = "buttonBrowseBloom";
+            this.buttonBrowseBloom.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseBloom.TabIndex = 19;
+            this.buttonBrowseBloom.Text = "Browse...";
+            this.buttonBrowseBloom.UseVisualStyleBackColor = true;
+            this.buttonBrowseBloom.Click += new System.EventHandler(this.buttonBrowseBloom_Click);
+            // 
+            // textBoxBloomFilter
+            // 
+            this.textBoxBloomFilter.Location = new System.Drawing.Point(122, 73);
+            this.textBoxBloomFilter.Name = "textBoxBloomFilter";
+            this.textBoxBloomFilter.Size = new System.Drawing.Size(353, 20);
+            this.textBoxBloomFilter.TabIndex = 18;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 76);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(61, 13);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "Bloom filter:";
+            // 
+            // radioButtonBloom
+            // 
+            this.radioButtonBloom.AutoSize = true;
+            this.radioButtonBloom.Location = new System.Drawing.Point(318, 19);
+            this.radioButtonBloom.Name = "radioButtonBloom";
+            this.radioButtonBloom.Size = new System.Drawing.Size(79, 17);
+            this.radioButtonBloom.TabIndex = 16;
+            this.radioButtonBloom.TabStop = true;
+            this.radioButtonBloom.Text = "Bloom Filter";
+            this.radioButtonBloom.UseVisualStyleBackColor = true;
+            this.radioButtonBloom.CheckedChanged += new System.EventHandler(this.radioButtonBloom_CheckedChanged);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 26);
+            this.label6.Location = new System.Drawing.Point(6, 21);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(70, 13);
             this.label6.TabIndex = 15;
@@ -94,7 +152,7 @@
             // radioButtonOnline
             // 
             this.radioButtonOnline.AutoSize = true;
-            this.radioButtonOnline.Location = new System.Drawing.Point(222, 24);
+            this.radioButtonOnline.Location = new System.Drawing.Point(222, 19);
             this.radioButtonOnline.Name = "radioButtonOnline";
             this.radioButtonOnline.Size = new System.Drawing.Size(55, 17);
             this.radioButtonOnline.TabIndex = 14;
@@ -105,7 +163,7 @@
             // 
             this.radioButtonOffline.AutoSize = true;
             this.radioButtonOffline.Checked = true;
-            this.radioButtonOffline.Location = new System.Drawing.Point(124, 24);
+            this.radioButtonOffline.Location = new System.Drawing.Point(122, 19);
             this.radioButtonOffline.Name = "radioButtonOffline";
             this.radioButtonOffline.Size = new System.Drawing.Size(55, 17);
             this.radioButtonOffline.TabIndex = 13;
@@ -117,7 +175,7 @@
             // textBoxWarningDialog
             // 
             this.textBoxWarningDialog.AcceptsReturn = true;
-            this.textBoxWarningDialog.Location = new System.Drawing.Point(33, 197);
+            this.textBoxWarningDialog.Location = new System.Drawing.Point(24, 278);
             this.textBoxWarningDialog.Multiline = true;
             this.textBoxWarningDialog.Name = "textBoxWarningDialog";
             this.textBoxWarningDialog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -128,7 +186,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(241, 76);
+            this.label5.Location = new System.Drawing.Point(239, 142);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(252, 13);
             this.label5.TabIndex = 11;
@@ -137,7 +195,7 @@
             // checkBoxWarningDialog
             // 
             this.checkBoxWarningDialog.AutoSize = true;
-            this.checkBoxWarningDialog.Location = new System.Drawing.Point(6, 174);
+            this.checkBoxWarningDialog.Location = new System.Drawing.Point(6, 255);
             this.checkBoxWarningDialog.Name = "checkBoxWarningDialog";
             this.checkBoxWarningDialog.Size = new System.Drawing.Size(297, 17);
             this.checkBoxWarningDialog.TabIndex = 9;
@@ -160,7 +218,7 @@
             this.checkBoxBreachCountDetails.AutoSize = true;
             this.checkBoxBreachCountDetails.Checked = true;
             this.checkBoxBreachCountDetails.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBreachCountDetails.Location = new System.Drawing.Point(6, 151);
+            this.checkBoxBreachCountDetails.Location = new System.Drawing.Point(6, 232);
             this.checkBoxBreachCountDetails.Name = "checkBoxBreachCountDetails";
             this.checkBoxBreachCountDetails.Size = new System.Drawing.Size(271, 17);
             this.checkBoxBreachCountDetails.TabIndex = 8;
@@ -170,7 +228,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 128);
+            this.label4.Location = new System.Drawing.Point(6, 194);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 7;
@@ -178,7 +236,7 @@
             // 
             // textBoxInsecureText
             // 
-            this.textBoxInsecureText.Location = new System.Drawing.Point(122, 125);
+            this.textBoxInsecureText.Location = new System.Drawing.Point(122, 191);
             this.textBoxInsecureText.Name = "textBoxInsecureText";
             this.textBoxInsecureText.Size = new System.Drawing.Size(111, 20);
             this.textBoxInsecureText.TabIndex = 7;
@@ -186,7 +244,7 @@
             // 
             // textBoxSecureText
             // 
-            this.textBoxSecureText.Location = new System.Drawing.Point(122, 99);
+            this.textBoxSecureText.Location = new System.Drawing.Point(122, 165);
             this.textBoxSecureText.Name = "textBoxSecureText";
             this.textBoxSecureText.Size = new System.Drawing.Size(111, 20);
             this.textBoxSecureText.TabIndex = 6;
@@ -195,7 +253,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 102);
+            this.label3.Location = new System.Drawing.Point(6, 168);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 13);
             this.label3.TabIndex = 4;
@@ -203,7 +261,7 @@
             // 
             // textBoxColumnName
             // 
-            this.textBoxColumnName.Location = new System.Drawing.Point(122, 73);
+            this.textBoxColumnName.Location = new System.Drawing.Point(122, 139);
             this.textBoxColumnName.Name = "textBoxColumnName";
             this.textBoxColumnName.Size = new System.Drawing.Size(111, 20);
             this.textBoxColumnName.TabIndex = 5;
@@ -228,7 +286,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 76);
+            this.label1.Location = new System.Drawing.Point(6, 142);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 0;
@@ -237,7 +295,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(420, 392);
+            this.buttonOK.Location = new System.Drawing.Point(420, 471);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 2;
@@ -249,7 +307,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(501, 392);
+            this.buttonCancel.Location = new System.Drawing.Point(501, 471);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -276,16 +334,6 @@
             this.groupBoxActions.TabStop = false;
             this.groupBoxActions.Text = "Actions";
             // 
-            // buttonCheckAll
-            // 
-            this.buttonCheckAll.Location = new System.Drawing.Point(6, 19);
-            this.buttonCheckAll.Name = "buttonCheckAll";
-            this.buttonCheckAll.Size = new System.Drawing.Size(138, 23);
-            this.buttonCheckAll.TabIndex = 0;
-            this.buttonCheckAll.Text = "Check All Passwords";
-            this.buttonCheckAll.UseVisualStyleBackColor = true;
-            this.buttonCheckAll.Click += new System.EventHandler(this.buttonCheckAll_Click);
-            // 
             // buttonClearAll
             // 
             this.buttonClearAll.Location = new System.Drawing.Point(150, 19);
@@ -296,6 +344,16 @@
             this.buttonClearAll.UseVisualStyleBackColor = true;
             this.buttonClearAll.Click += new System.EventHandler(this.buttonClearAll_Click);
             // 
+            // buttonCheckAll
+            // 
+            this.buttonCheckAll.Location = new System.Drawing.Point(6, 19);
+            this.buttonCheckAll.Name = "buttonCheckAll";
+            this.buttonCheckAll.Size = new System.Drawing.Size(138, 23);
+            this.buttonCheckAll.TabIndex = 0;
+            this.buttonCheckAll.Text = "Check All Passwords";
+            this.buttonCheckAll.UseVisualStyleBackColor = true;
+            this.buttonCheckAll.Click += new System.EventHandler(this.buttonCheckAll_Click);
+            // 
             // HIBPOfflineCheckOptions
             // 
             this.AcceptButton = this.buttonOK;
@@ -303,7 +361,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(588, 427);
+            this.ClientSize = new System.Drawing.Size(588, 506);
             this.Controls.Add(this.groupBoxActions);
             this.Controls.Add(this.pb_BannerImage);
             this.Controls.Add(this.buttonCancel);
@@ -350,5 +408,10 @@
         private System.Windows.Forms.GroupBox groupBoxActions;
         private System.Windows.Forms.Button buttonClearAll;
         private System.Windows.Forms.Button buttonCheckAll;
+        private System.Windows.Forms.RadioButton radioButtonBloom;
+        private System.Windows.Forms.Button buttonBrowseBloom;
+        private System.Windows.Forms.TextBox textBoxBloomFilter;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button buttonCreateBloom;
     }
 }

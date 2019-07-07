@@ -63,7 +63,7 @@ namespace HIBPOfflineCheck
         private void ToolsMenuItemClick(object sender, EventArgs e)
         {
             HIBPOfflineCheckOptions optionsForm = new HIBPOfflineCheckOptions(this);
-            optionsForm.Show();
+            optionsForm.ShowDialog();
         }
 
         private void CreateMenuItems()
@@ -154,7 +154,8 @@ namespace HIBPOfflineCheck
                 InsecureText = config.GetString(Options.Names.INSECURE_TEXT) ?? "Pwned",
                 BreachCountDetails = config.GetBool(Options.Names.BREACH_COUNT_DETAILS, true),
                 WarningDialog = config.GetBool(Options.Names.WARNING_DIALOG, false),
-                WarningDialogText = XmlUnescape(config.GetString(Options.Names.WARNING_DIALOG_TEXT) ?? "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known")
+                WarningDialogText = XmlUnescape(config.GetString(Options.Names.WARNING_DIALOG_TEXT) ?? "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known"),
+                BloomFilter = config.GetString(Options.Names.BLOOM_FILTER) ?? ""
             };
 
             this.options = options;
@@ -175,6 +176,7 @@ namespace HIBPOfflineCheck
             config.SetBool(Options.Names.BREACH_COUNT_DETAILS, options.BreachCountDetails);
             config.SetBool(Options.Names.WARNING_DIALOG, options.WarningDialog);
             config.SetString(Options.Names.WARNING_DIALOG_TEXT, XmlEscape(options.WarningDialogText));
+            config.SetString(Options.Names.BLOOM_FILTER, options.BloomFilter);
 
             this.options = options;
             prov.PluginOptions = options;

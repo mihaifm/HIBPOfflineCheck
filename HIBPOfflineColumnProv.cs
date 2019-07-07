@@ -22,11 +22,13 @@ namespace HIBPOfflineCheck
         private PwEntry PasswordEntry { get; set; }
 
         public IPluginHost Host { private get; set; }
-        public Options PluginOptions { private get; set; }
+        public Options PluginOptions { get; set; }
 
         private bool insecureWarning;
         private bool formEdited;
         private bool receivedStatus;
+
+        public BloomFilter BloomFilter { get; set; }
 
         public override string[] ColumnNames
         {
@@ -36,6 +38,43 @@ namespace HIBPOfflineCheck
         public override bool SupportsCellAction(string strColumnName)
         {
             return (strColumnName == PluginOptions.ColumnName);
+        }
+
+        private void GetPasswordStatus()
+        {
+            if (PluginOptions.CheckMode == Options.CheckModeType.Offline)
+            {
+                GetOfflineStatus();
+            }
+            else if (PluginOptions.CheckMode == Options.CheckModeType.Online)
+            {
+                GetOnlineStatus();
+            }
+            else if (PluginOptions.CheckMode == Options.CheckModeType.BloomFilter)
+            {
+                GetBloomStatus();
+            }
+
+            receivedStatus = true;
+        }
+
+        private string GetPasswordSHA()
+        {
+            using (var sha1 = new SHA1CryptoServiceProvider())
+            {
+                var context = new SprContext(PasswordEntry, Host.Database, SprCompileFlags.All);
+                var password = SprEngine.Compile(PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).ReadString(), context);
+
+                var pwdShaBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+                var sb = new StringBuilder(2 * pwdShaBytes.Length);
+
+                foreach (var b in pwdShaBytes)
+                {
+                    sb.AppendFormat("{0:X2}", b);
+                }
+
+                return sb.ToString();
+            }
         }
 
         private void GetOnlineStatus()
@@ -99,39 +138,6 @@ namespace HIBPOfflineCheck
             {
                 Status = "HIBP API error";
             }
-        }
-
-        private string GetPasswordSHA()
-        {
-            using (var sha1 = new SHA1CryptoServiceProvider())
-            {
-                var context = new SprContext(PasswordEntry, Host.Database, SprCompileFlags.All);
-                var password = SprEngine.Compile(PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).ReadString(), context);
-
-                var pwdShaBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
-                var sb = new StringBuilder(2 * pwdShaBytes.Length);
-
-                foreach (var b in pwdShaBytes)
-                {
-                    sb.AppendFormat("{0:X2}", b);
-                }
-
-                return sb.ToString();
-            }
-        }
-
-        private void GetPasswordStatus()
-        {
-            if (PluginOptions.CheckMode == Options.CheckModeType.Offline)
-            {
-                GetOfflineStatus();
-            }
-            else if (PluginOptions.CheckMode == Options.CheckModeType.Online)
-            {
-                GetOnlineStatus();
-            }
-
-            receivedStatus = true;
         }
 
         private void GetOfflineStatus()
@@ -203,6 +209,32 @@ namespace HIBPOfflineCheck
                 {
                     Status = "Failed to read HIBP file";
                 }
+            }
+        }
+
+        private void GetBloomStatus()
+        {
+            string pwdShaStr = GetPasswordSHA();
+
+            var bloomFilterFile = PluginOptions.BloomFilter;
+            if (!File.Exists(bloomFilterFile))
+            {
+                Status = "Bloom Filter not found";
+                return;
+            }
+
+            if (BloomFilter == null || BloomFilter.Capacity == 0)
+            {
+                BloomFilter = new BloomFilter(bloomFilterFile);
+            }
+
+            if (BloomFilter.Contains(pwdShaStr))
+            {
+                Status = PluginOptions.InsecureText;
+            }
+            else
+            {
+                Status = PluginOptions.SecureText;
             }
         }
 

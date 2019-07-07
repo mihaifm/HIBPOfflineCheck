@@ -17,6 +17,11 @@ xcopy /Y %PluginRoot%\Options.cs plgx\
 xcopy /Y %PluginRoot%\Resources\Nuvola\B48x48_KOrganizer.png plgx\Resources\Nuvola\
 xcopy /Y %PluginRoot%\Properties\Resources.Designer.cs plgx\Properties\
 xcopy /Y %PluginRoot%\Properties\Resources.resx plgx\Properties\
+xcopy /Y %PluginRoot%\BitStorage.cs plgx\
+xcopy /Y %PluginRoot%\BloomFilter.cs plgx\
+xcopy /Y %PluginRoot%\CreateBloomFilter.Designer.cs plgx\
+xcopy /Y %PluginRoot%\CreateBloomFilter.cs plgx\
+xcopy /Y %PluginRoot%\CreateBloomFilter.resx plgx\
 
 %KeePassExe% --plgx-create "%BuildPath%plgx"
 
