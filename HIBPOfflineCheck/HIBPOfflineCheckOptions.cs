@@ -20,7 +20,7 @@ namespace HIBPOfflineCheck
         private bool CommitOptions()
         {
             options.CheckMode = radioButtonOffline.Checked ?
-                Options.CheckModeType.Offline : radioButtonOffline.Checked ?
+                Options.CheckModeType.Offline : radioButtonOnline.Checked ?
                 Options.CheckModeType.Online : Options.CheckModeType.BloomFilter;
 
             options.HIBPFileName = textBoxFileName.Text;
