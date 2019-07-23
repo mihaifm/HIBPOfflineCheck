@@ -1,8 +1,8 @@
 .vs
-bin/*
-obj/*
+HIBPOfflineCheck/bin/*
+HIBPOfflineCheck/obj/*
 screen.png
-plgx/*
+HIBPOfflineCheck/plgx/*
 *.plgx
 release_checklist.txt
 HIBPOfflineCheck.plgx.asc

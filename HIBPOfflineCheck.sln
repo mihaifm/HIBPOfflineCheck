@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIBPOfflineCheck", "HIBPOfflineCheck.csproj", "{B4DFC614-CDC6-43BE-8D6A-D4EFD47BB79E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIBPOfflineCheck", "HIBPOfflineCheck\HIBPOfflineCheck.csproj", "{B4DFC614-CDC6-43BE-8D6A-D4EFD47BB79E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CBAC84C5-9B4A-49AC-AF7A-942AF54371BE}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		readme.md = readme.md
+		version.txt = version.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +26,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C293D69A-1DFC-4B64-9DD3-0D29FBA18769}
 	EndGlobalSection
 EndGlobal
