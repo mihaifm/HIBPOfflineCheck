@@ -303,7 +303,7 @@ namespace HIBPOfflineCheck
 
             UIScrollInfo scroll = UIUtil.GetScrollInfo(lv, true);
 
-            PasswordEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(true, Status));
+            PasswordEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(false, Status));
 
             mainForm.UpdateUI(false, null, false, null, true, null, true);
 
