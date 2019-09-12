@@ -45,6 +45,7 @@ namespace HIBPOfflineCheck
             PwEntryForm form = e.Form as PwEntryForm;
             if (form == null) return;
 
+            Prov.ClearEventHandlers(form);
             form.EntrySaved += prov.EntrySaved;
         }
 
@@ -69,19 +70,25 @@ namespace HIBPOfflineCheck
         private void CreateMenuItems()
         {
             string hibpMenuItemText = "Have I been pwned?";
-            string clearMenuItemText = "Clear pwned status";
 
             ContextMenuStrip entryContextMenu = Host.MainWindow.EntryContextMenu;
 
             entryContextMenu.Items.Add(new ToolStripSeparator());
 
             ToolStripMenuItem hibpCtxMenuItem = new ToolStripMenuItem(hibpMenuItemText);
-            hibpCtxMenuItem.Click += new EventHandler(prov.OnMenuHIBP);
             entryContextMenu.Items.Add(hibpCtxMenuItem);
 
-            ToolStripMenuItem hibpClearCtxMenuItem = new ToolStripMenuItem(clearMenuItemText);
-            hibpClearCtxMenuItem.Click += new EventHandler(prov.OnMenuHIBPClear);
-            entryContextMenu.Items.Add(hibpClearCtxMenuItem);
+            ToolStripMenuItem hibpCheckCtx = new ToolStripMenuItem("Check");
+            hibpCheckCtx.Click += new EventHandler(prov.OnMenuHIBP);
+            hibpCtxMenuItem.DropDownItems.Add(hibpCheckCtx);
+
+            ToolStripMenuItem hibpClearCtx = new ToolStripMenuItem("Clear");
+            hibpClearCtx.Click += new EventHandler(prov.OnMenuHIBPClear);
+            hibpCtxMenuItem.DropDownItems.Add(hibpClearCtx);
+
+            ToolStripMenuItem hibpExcludeCtx = new ToolStripMenuItem("Exclude");
+            hibpExcludeCtx.Click += new EventHandler(prov.OnMenuHIBPExclude);
+            hibpCtxMenuItem.DropDownItems.Add(hibpExcludeCtx);
 
             var m_menuEntry = Host.MainWindow.MainMenu.Items.Find("m_menuEntry", true);
 
@@ -92,12 +99,19 @@ namespace HIBPOfflineCheck
                 entryMenu.DropDownItems.Add(new ToolStripSeparator());
 
                 ToolStripMenuItem hibpMenuItem = new ToolStripMenuItem(hibpMenuItemText);
-                hibpMenuItem.Click += new EventHandler(prov.OnMenuHIBP);
                 entryMenu.DropDownItems.Add(hibpMenuItem);
 
-                ToolStripMenuItem hibpClearMenuItem = new ToolStripMenuItem(clearMenuItemText);
+                ToolStripMenuItem hibpCheckMenuItem = new ToolStripMenuItem("Check");
+                hibpCheckMenuItem.Click += new EventHandler(prov.OnMenuHIBP);
+                hibpMenuItem.DropDownItems.Add(hibpCheckMenuItem);
+
+                ToolStripMenuItem hibpClearMenuItem = new ToolStripMenuItem("Clear");
                 hibpClearMenuItem.Click += new EventHandler(prov.OnMenuHIBPClear);
-                entryMenu.DropDownItems.Add(hibpClearMenuItem);
+                hibpMenuItem.DropDownItems.Add(hibpClearMenuItem);
+
+                ToolStripMenuItem hibpExcludeMenuItem = new ToolStripMenuItem("Exclude");
+                hibpExcludeMenuItem.Click += new EventHandler(prov.OnMenuHIBPExclude);
+                hibpMenuItem.DropDownItems.Add(hibpExcludeMenuItem);
             }
         }
 
@@ -152,8 +166,10 @@ namespace HIBPOfflineCheck
                 ColumnName = config.GetString(Options.Names.COLUMN_NAME) ?? "Have I been pwned?",
                 SecureText = config.GetString(Options.Names.SECURE_TEXT) ?? "Secure",
                 InsecureText = config.GetString(Options.Names.INSECURE_TEXT) ?? "Pwned",
+                ExcludedText = config.GetString(Options.Names.EXCLUDED_TEXT) ?? "Excluded",
                 BreachCountDetails = config.GetBool(Options.Names.BREACH_COUNT_DETAILS, true),
                 WarningDialog = config.GetBool(Options.Names.WARNING_DIALOG, false),
+                AutoCheck = config.GetBool(Options.Names.AUTO_CHECK, true),
                 WarningDialogText = XmlUnescape(config.GetString(Options.Names.WARNING_DIALOG_TEXT) ?? "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known"),
                 BloomFilter = config.GetString(Options.Names.BLOOM_FILTER) ?? ""
             };
@@ -172,9 +188,11 @@ namespace HIBPOfflineCheck
             config.SetString(Options.Names.HIBP_FILE_NAME, options.HIBPFileName);
             config.SetString(Options.Names.COLUMN_NAME, options.ColumnName);
             config.SetString(Options.Names.SECURE_TEXT, options.SecureText);
+            config.SetString(Options.Names.EXCLUDED_TEXT, options.ExcludedText);
             config.SetString(Options.Names.INSECURE_TEXT, options.InsecureText);
             config.SetBool(Options.Names.BREACH_COUNT_DETAILS, options.BreachCountDetails);
             config.SetBool(Options.Names.WARNING_DIALOG, options.WarningDialog);
+            config.SetBool(Options.Names.AUTO_CHECK, options.AutoCheck);
             config.SetString(Options.Names.WARNING_DIALOG_TEXT, XmlEscape(options.WarningDialogText));
             config.SetString(Options.Names.BLOOM_FILTER, options.BloomFilter);
 

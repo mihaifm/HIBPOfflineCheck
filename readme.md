@@ -66,9 +66,9 @@ __Double click__ a password entry under the `Have I been pwned?` column to get t
     
 ### Multiple passwords check
 
-__Select multiple entries__, `right click -> Have I been pwned?`
+__Select multiple entries__, `right click -> Have I been pwned? -> Check`
     
-![image](https://user-images.githubusercontent.com/981184/59965011-6dc32900-9511-11e9-9049-0c458802aebf.png)
+![image](https://user-images.githubusercontent.com/981184/64819685-86465b00-d5b7-11e9-8e81-e95b31acbfd7.png)
         
 ### Check all passwords 
 

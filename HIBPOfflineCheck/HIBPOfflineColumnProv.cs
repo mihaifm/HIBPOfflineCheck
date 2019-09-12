@@ -27,6 +27,7 @@ namespace HIBPOfflineCheck
         private bool insecureWarning;
         private bool formEdited;
         private bool receivedStatus;
+        private string currentStatus;
 
         public BloomFilter BloomFilter { get; set; }
 
@@ -42,6 +43,14 @@ namespace HIBPOfflineCheck
 
         private void GetPasswordStatus()
         {
+            currentStatus = GetCurrentStatus(PasswordEntry);
+
+            if (currentStatus == PluginOptions.ExcludedText)
+            {
+                Status = PluginOptions.ExcludedText;
+                return;
+            }
+
             if (PluginOptions.CheckMode == Options.CheckModeType.Offline)
             {
                 GetOfflineStatus();
@@ -247,7 +256,7 @@ namespace HIBPOfflineCheck
 
             GetPasswordStatus();
 
-            TouchEntry(PasswordEntry); 
+            TouchEntry(PasswordEntry);
         }
 
         private void PwdTouchedHandler(object sender, ObjectTouchedEventArgs e)
@@ -262,11 +271,14 @@ namespace HIBPOfflineCheck
                     formEdited = true;
                 }
 
-                UpdateStatus();
+                if (currentStatus != Status)
+                {
+                    UpdateStatus();
+                }
             }
         }
 
-        private void TouchEntry(PwEntry pe)
+        private string GetCurrentStatus(PwEntry pe)
         {
             string currentStatus = null;
 
@@ -277,13 +289,29 @@ namespace HIBPOfflineCheck
                 currentStatus = pe.Strings.Get(PluginOptions.ColumnName).ReadString();
             }
 
-            if (currentStatus == null || currentStatus != Status)
+            return currentStatus;
+        }
+
+        private void TouchEntry(PwEntry pe)
+        {
+            if (currentStatus == null ||
+                currentStatus != Status && currentStatus != PluginOptions.ExcludedText)
             {
                 pe.Touched -= PwdTouchedHandler;
                 pe.Touched += PwdTouchedHandler;
 
                 pe.Touch(true);
             }
+
+            ResetState();
+        }
+
+        private void ResetState()
+        {
+            insecureWarning = false;
+            formEdited = false;
+            receivedStatus = false;
+            currentStatus = null;
         }
 
         public override string GetCellData(string strColumnName, PwEntry pe)
@@ -315,9 +343,7 @@ namespace HIBPOfflineCheck
                     "HIBP Offline Check", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
-            insecureWarning = false;
-            formEdited = false;
-            receivedStatus = false;
+            ResetState();
         }
 
         public void PasswordCheckWorker()
@@ -417,18 +443,38 @@ namespace HIBPOfflineCheck
             mainForm.UpdateUI(false, null, false, null, true, null, true);
         }
 
+        public void OnMenuHIBPExclude(object sender, EventArgs e)
+        {
+            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
+            PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
+
+            foreach (PwEntry pwEntry in selectedEntries)
+            {
+                Status = PluginOptions.ExcludedText;
+                pwEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(false, Status));
+            }
+
+            mainForm.UpdateUI(false, null, false, null, true, null, true);
+        }
+        
         public void EntrySaved(object sender, EventArgs e)
         {
             PwEntryForm form = sender as PwEntryForm;
 
+            if (PluginOptions.AutoCheck == false)
+            {
+                return;
+            }
+
             form.EntryRef.Touched -= PwdTouchedHandler;
             form.EntryRef.Touched += PwdTouchedHandler;
 
-            //only touch newly created entries, updated entries are touched by KeePass
-            if (form.EntryRef.UsageCount <= 1)
-            {
-                form.EntryRef.Touch(true);
-            }
+            form.EntryRef.Touch(true);
+        }
+
+        public void ClearEventHandlers(PwEntryForm form)
+        {
+            form.EntryRef.Touched -= PwdTouchedHandler;
         }
     }
 }

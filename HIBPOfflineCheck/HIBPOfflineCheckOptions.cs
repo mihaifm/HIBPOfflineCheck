@@ -27,8 +27,10 @@ namespace HIBPOfflineCheck
             options.ColumnName = textBoxColumnName.Text;
             options.SecureText = textBoxSecureText.Text;
             options.InsecureText = textBoxInsecureText.Text;
+            options.ExcludedText = textBoxExcludedText.Text;
             options.BreachCountDetails = checkBoxBreachCountDetails.Checked;
             options.WarningDialog = checkBoxWarningDialog.Checked;
+            options.AutoCheck = checkBoxAutoCheck.Checked;
             options.WarningDialogText = textBoxWarningDialog.Text;
 
             bool bloomFilterChanged = (options.BloomFilter != textBoxBloomFilter.Text);
@@ -73,8 +75,10 @@ namespace HIBPOfflineCheck
             textBoxColumnName.Text = options.ColumnName;
             textBoxSecureText.Text = options.SecureText;
             textBoxInsecureText.Text = options.InsecureText;
+            textBoxExcludedText.Text = options.ExcludedText;
             checkBoxBreachCountDetails.Checked = options.BreachCountDetails;
             checkBoxWarningDialog.Checked = options.WarningDialog;
+            checkBoxAutoCheck.Checked = options.AutoCheck;
             textBoxWarningDialog.Text = options.WarningDialogText;
             textBoxWarningDialog.Enabled = checkBoxWarningDialog.Checked;
             textBoxBloomFilter.Text = options.BloomFilter;
