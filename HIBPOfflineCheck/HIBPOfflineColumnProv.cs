@@ -25,7 +25,6 @@ namespace HIBPOfflineCheck
         public Options PluginOptions { get; set; }
 
         private bool insecureWarning;
-        private bool formEdited;
         private bool receivedStatus;
         private string currentStatus;
 
@@ -240,6 +239,7 @@ namespace HIBPOfflineCheck
             if (BloomFilter.Contains(pwdShaStr))
             {
                 Status = PluginOptions.InsecureText;
+                insecureWarning = true;
             }
             else
             {
@@ -268,13 +268,20 @@ namespace HIBPOfflineCheck
                 {
                     PasswordEntry = pe;
                     GetPasswordStatus();
-                    formEdited = true;
+
+                    if (insecureWarning && PluginOptions.WarningDialog)
+                    {
+                        MessageBox.Show(PluginOptions.WarningDialogText,
+                            "HIBP Offline Check", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
 
                 if (currentStatus != Status)
                 {
                     UpdateStatus();
                 }
+
+                ResetState();
             }
         }
 
@@ -309,7 +316,6 @@ namespace HIBPOfflineCheck
         private void ResetState()
         {
             insecureWarning = false;
-            formEdited = false;
             receivedStatus = false;
             currentStatus = null;
         }
@@ -336,12 +342,6 @@ namespace HIBPOfflineCheck
             mainForm.UpdateUI(false, null, false, null, true, null, true);
 
             UIUtil.Scroll(lv, scroll, true);
-
-            if (insecureWarning && formEdited && PluginOptions.WarningDialog)
-            {
-                MessageBox.Show(PluginOptions.WarningDialogText,
-                    "HIBP Offline Check", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
 
             ResetState();
         }
@@ -475,6 +475,8 @@ namespace HIBPOfflineCheck
         public void ClearEventHandlers(PwEntryForm form)
         {
             form.EntryRef.Touched -= PwdTouchedHandler;
+
+            ResetState();
         }
     }
 }

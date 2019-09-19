@@ -25,7 +25,7 @@ The plugin adds a new column to KeePass. When double-clicking the column for a s
 - [k-anonimity](https://haveibeenpwned.com/API/v2#SearchingPwnedPasswordsByRange) method implemented for the online mode
 - the status (Pwned or Secure) is saved in the KeePass database and will be retrieved when reopening the app, and updated if the password entry changes
 - each password is individually checked only on user request
-- multiple passwords can be checked in bulk by using the right click menu (under "Selected Entries")
+- multiple passwords can be checked in bulk by using the right click menu
 - option to check all passwords in the database
 
 ## Prerequisites
