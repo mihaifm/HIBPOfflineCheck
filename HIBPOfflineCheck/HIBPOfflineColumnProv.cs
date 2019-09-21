@@ -24,9 +24,10 @@ namespace HIBPOfflineCheck
         public IPluginHost Host { private get; set; }
         public Options PluginOptions { get; set; }
 
-        private bool insecureWarning;
-        private bool receivedStatus;
-        private string currentStatus;
+        private bool insecureWarning = false;
+        private bool receivedStatus = false;
+        private string currentStatus = null;
+        private bool bulkCheck = false;
 
         public BloomFilter BloomFilter { get; set; }
 
@@ -253,6 +254,7 @@ namespace HIBPOfflineCheck
             if (strColumnName != PluginOptions.ColumnName) { return; }
 
             PasswordEntry = pe;
+            bulkCheck = false;
 
             GetPasswordStatus();
 
@@ -333,17 +335,24 @@ namespace HIBPOfflineCheck
         private void UpdateStatus()
         {
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
-            ListView lv = (mainForm.Controls.Find("m_lvEntries", true)[0] as ListView);
-
-            UIScrollInfo scroll = UIUtil.GetScrollInfo(lv, true);
 
             PasswordEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(false, Status));
 
-            mainForm.UpdateUI(false, null, false, null, true, null, true);
-
-            UIUtil.Scroll(lv, scroll, true);
+            if (bulkCheck == false)
+            {
+                UpdateUI();
+            }
 
             ResetState();
+        }
+
+        private void UpdateUI()
+        {
+            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
+            ListView lv = (mainForm.Controls.Find("m_lvEntries", true)[0] as ListView);
+            UIScrollInfo scroll = UIUtil.GetScrollInfo(lv, true);
+            mainForm.UpdateUI(false, null, false, null, true, null, true);
+            UIUtil.Scroll(lv, scroll, true);
         }
 
         public void PasswordCheckWorker()
@@ -358,6 +367,8 @@ namespace HIBPOfflineCheck
 
         public async void CheckAll()
         {
+            bulkCheck = true;
+
             var progressDisplay = new ProgressDisplay();
             progressDisplay.Show();
 
@@ -379,6 +390,8 @@ namespace HIBPOfflineCheck
                 }
             }
 
+            UpdateUI();
+            
             progressDisplay.Close();
         }
 
@@ -390,6 +403,8 @@ namespace HIBPOfflineCheck
             if (dialog == DialogResult.Cancel)
                 return;
 
+            bulkCheck = true;
+
             MainForm mainForm = Host.MainWindow;
 
             PwObjectList<PwEntry> allEntries = new PwObjectList<PwEntry>();
@@ -397,15 +412,21 @@ namespace HIBPOfflineCheck
 
             for (uint i = 0; i < allEntries.UCount; i++)
             {
-                var pwEntry = allEntries.GetAt(i);
-                pwEntry.Strings.Remove(PluginOptions.ColumnName);
+                PasswordEntry = allEntries.GetAt(i);
+
+                PasswordEntry.Strings.Remove(PluginOptions.ColumnName);
+                Status = null;
+                receivedStatus = true;
+                TouchEntry(PasswordEntry);
             }
 
-            mainForm.UpdateUI(false, null, false, null, true, null, true);
+            UpdateUI();
         }
 
         public async void OnMenuHIBP(object sender, EventArgs e)
         {
+            bulkCheck = true;
+
             var progressDisplay = new ProgressDisplay();
             progressDisplay.Show();
 
@@ -427,6 +448,8 @@ namespace HIBPOfflineCheck
                 }
             }
 
+            UpdateUI();
+
             progressDisplay.Close();
         }
 
@@ -435,12 +458,19 @@ namespace HIBPOfflineCheck
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
             PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
 
+            bulkCheck = true;
+
             foreach (PwEntry pwEntry in selectedEntries)
             {
-                pwEntry.Strings.Remove(PluginOptions.ColumnName);
+                PasswordEntry = pwEntry;
+
+                PasswordEntry.Strings.Remove(PluginOptions.ColumnName);
+                Status = null;
+                receivedStatus = true;
+                TouchEntry(PasswordEntry);
             }
 
-            mainForm.UpdateUI(false, null, false, null, true, null, true);
+            UpdateUI();
         }
 
         public void OnMenuHIBPExclude(object sender, EventArgs e)
@@ -448,13 +478,18 @@ namespace HIBPOfflineCheck
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
             PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
 
+            bulkCheck = true;
+
             foreach (PwEntry pwEntry in selectedEntries)
             {
+                PasswordEntry = pwEntry;
+
                 Status = PluginOptions.ExcludedText;
-                pwEntry.Strings.Set(PluginOptions.ColumnName, new ProtectedString(false, Status));
+                receivedStatus = true;
+                TouchEntry(PasswordEntry);
             }
 
-            mainForm.UpdateUI(false, null, false, null, true, null, true);
+            UpdateUI();
         }
         
         public void EntrySaved(object sender, EventArgs e)
@@ -468,6 +503,8 @@ namespace HIBPOfflineCheck
 
             form.EntryRef.Touched -= PwdTouchedHandler;
             form.EntryRef.Touched += PwdTouchedHandler;
+
+            bulkCheck = false;
 
             form.EntryRef.Touch(true);
         }
