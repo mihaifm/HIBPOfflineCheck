@@ -205,7 +205,7 @@
             this.checkBoxWarningDialog.Name = "checkBoxWarningDialog";
             this.checkBoxWarningDialog.Size = new System.Drawing.Size(297, 17);
             this.checkBoxWarningDialog.TabIndex = 9;
-            this.checkBoxWarningDialog.Text = "Display warning mesage after editing insecure passwords:";
+            this.checkBoxWarningDialog.Text = "Display warning message after editing insecure passwords:";
             this.checkBoxWarningDialog.UseVisualStyleBackColor = true;
             this.checkBoxWarningDialog.CheckedChanged += new System.EventHandler(this.checkBoxWarningDialog_CheckedChanged);
             // 
