@@ -64,7 +64,7 @@
             // buttonCreate
             // 
             this.buttonCreate.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.buttonCreate.Location = new System.Drawing.Point(152, 203);
+            this.buttonCreate.Location = new System.Drawing.Point(152, 211);
             this.buttonCreate.Name = "buttonCreate";
             this.buttonCreate.Size = new System.Drawing.Size(75, 23);
             this.buttonCreate.TabIndex = 3;
@@ -74,7 +74,7 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(12, 172);
+            this.progressBar.Location = new System.Drawing.Point(12, 182);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(449, 23);
             this.progressBar.TabIndex = 4;
@@ -118,11 +118,11 @@
             // labelInfo
             // 
             this.labelInfo.AutoSize = true;
-            this.labelInfo.Location = new System.Drawing.Point(9, 156);
+            this.labelInfo.Location = new System.Drawing.Point(9, 166);
             this.labelInfo.Name = "labelInfo";
-            this.labelInfo.Size = new System.Drawing.Size(275, 13);
+            this.labelInfo.Size = new System.Drawing.Size(279, 13);
             this.labelInfo.TabIndex = 9;
-            this.labelInfo.Text = "Generating the filter may take up to one hour to complete";
+            this.labelInfo.Text = "Generating the filter may take several minutes to complete, depending on your hardware.";
             // 
             // groupBox1
             // 
@@ -150,7 +150,8 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(233, 203);
+            this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonCancel.Location = new System.Drawing.Point(233, 211);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 12;
@@ -163,7 +164,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(473, 238);
+            this.ClientSize = new System.Drawing.Size(473, 246);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.labelInfo);
             this.Controls.Add(this.progressBar);
