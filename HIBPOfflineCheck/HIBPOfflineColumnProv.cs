@@ -369,6 +369,9 @@ namespace HIBPOfflineCheck
         {
             bulkCheck = true;
 
+            if (Host.Database == null || Host.Database.RootGroup == null)
+                return;
+
             var progressDisplay = new ProgressDisplay();
             progressDisplay.Show();
 
@@ -397,6 +400,9 @@ namespace HIBPOfflineCheck
 
         public void ClearAll()
         {
+            if (Host.Database == null || Host.Database.RootGroup == null)
+                return;
+
             DialogResult dialog = MessageBox.Show("This will remove the HIBP status for all entries in the database. Continue?",
                 String.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
@@ -427,11 +433,14 @@ namespace HIBPOfflineCheck
         {
             bulkCheck = true;
 
-            var progressDisplay = new ProgressDisplay();
-            progressDisplay.Show();
-
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
             PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
+
+            if (selectedEntries == null)
+                return;
+
+            var progressDisplay = new ProgressDisplay();
+            progressDisplay.Show();
 
             for (int j = 0; j < selectedEntries.Length; j++)
             {
@@ -455,10 +464,13 @@ namespace HIBPOfflineCheck
 
         public void OnMenuHIBPClear(object sender, EventArgs e)
         {
+            bulkCheck = true;
+
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
             PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
 
-            bulkCheck = true;
+            if (selectedEntries == null)
+                return;
 
             foreach (PwEntry pwEntry in selectedEntries)
             {
@@ -475,10 +487,13 @@ namespace HIBPOfflineCheck
 
         public void OnMenuHIBPExclude(object sender, EventArgs e)
         {
+            bulkCheck = true;
+
             MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
             PwEntry[] selectedEntries = mainForm.GetSelectedEntries();
 
-            bulkCheck = true;
+            if (selectedEntries == null)
+                return;
 
             foreach (PwEntry pwEntry in selectedEntries)
             {
