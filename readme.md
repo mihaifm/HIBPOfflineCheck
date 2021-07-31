@@ -80,6 +80,12 @@ To check all the passwords in the database:
 
 Newly created and updated entries are automatically checked. There is also an option to display a warning after creating an insecure password. 
 
+### Find all pwned passwords
+
+To view all your insecure passwords, use the Find menu (it will only display passwords which have been checked, so make sure to check all first):
+
+`Find -> Pwned Passwords`
+
 ### Bloom filter
 
 A [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) allows you to save disk space by not having to store the HIBP passwords file on your drive. Instead, a generated file (currently under 1GB in size) would be loaded, providing an accuracy of 99.9% for password checking. Only about 1/1000 Secure passwords would be false positives, showing up as Pwned. Pwned passwords will *never* show up as Secure.

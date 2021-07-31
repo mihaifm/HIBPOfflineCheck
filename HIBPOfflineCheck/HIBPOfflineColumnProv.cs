@@ -13,6 +13,7 @@ using KeePassLib;
 using KeePassLib.Security;
 using System.Net;
 using KeePassLib.Collections;
+using KeePassLib.Delegates;
 
 namespace HIBPOfflineCheck
 {
@@ -404,14 +405,12 @@ namespace HIBPOfflineCheck
                 return;
 
             DialogResult dialog = MessageBox.Show("This will remove the HIBP status for all entries in the database. Continue?",
-                String.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                string.Empty, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
             if (dialog == DialogResult.Cancel)
                 return;
 
             bulkCheck = true;
-
-            MainForm mainForm = Host.MainWindow;
 
             PwObjectList<PwEntry> allEntries = new PwObjectList<PwEntry>();
             Host.Database.RootGroup.SearchEntries(SearchParameters.None, allEntries);
@@ -427,6 +426,33 @@ namespace HIBPOfflineCheck
             }
 
             UpdateUI();
+        }
+
+        public void OnMenuFindPwned(object sender, EventArgs e)
+        {
+            PwGroup pgResults = new PwGroup(true, true, string.Empty, PwIcon.List)
+            {
+                IsVirtual = true
+            };
+
+            Host.Database.RootGroup.TraverseTree(TraversalMethod.PreOrder, null, delegate(PwEntry pe)
+            {
+                var status = GetCurrentStatus(pe);
+                if (status != null && status.StartsWith(PluginOptions.InsecureText))
+                {
+                    pgResults.AddEntry(pe, false, false);
+                }
+
+                return true;
+            });
+
+            var sp = new SearchParameters
+            {
+                RespectEntrySearchingDisabled = true
+            };
+
+            MainForm mainForm = HIBPOfflineCheckExt.Host.MainWindow;
+            mainForm.UpdateUI(false, null, false, null, true, pgResults, false);
         }
 
         public async void OnMenuHIBP(object sender, EventArgs e)

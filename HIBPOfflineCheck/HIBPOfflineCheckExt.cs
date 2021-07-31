@@ -113,6 +113,19 @@ namespace HIBPOfflineCheck
                 hibpExcludeMenuItem.Click += new EventHandler(prov.OnMenuHIBPExclude);
                 hibpMenuItem.DropDownItems.Add(hibpExcludeMenuItem);
             }
+
+            var m_menuFind = Host.MainWindow.MainMenu.Items.Find("m_menuFind", true);
+
+            if (m_menuFind.Length > 0)
+            {
+                var findMenu = m_menuFind[0] as ToolStripMenuItem;
+
+                findMenu.DropDownItems.Add(new ToolStripSeparator());
+
+                var findPwnedItem = new ToolStripMenuItem("Pwned Passwords");
+                findPwnedItem.Click += new EventHandler(prov.OnMenuFindPwned);
+                findMenu.DropDownItems.Add(findPwnedItem);
+            }
         }
 
         private static string GetDefaultFileName()
