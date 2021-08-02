@@ -181,6 +181,8 @@ namespace HIBPOfflineCheck
                 InsecureText = config.GetString(Options.Names.INSECURE_TEXT) ?? "Pwned",
                 ExcludedText = config.GetString(Options.Names.EXCLUDED_TEXT) ?? "Excluded",
                 BreachCountDetails = config.GetBool(Options.Names.BREACH_COUNT_DETAILS, true),
+                ExcludeRecycleBin = config.GetBool(Options.Names.EXCLUDE_RECYCLE_BIN, false),
+                ExcludeExpired = config.GetBool(Options.Names.EXCLUDE_EXPIRED, false),
                 WarningDialog = config.GetBool(Options.Names.WARNING_DIALOG, false),
                 AutoCheck = config.GetBool(Options.Names.AUTO_CHECK, true),
                 WarningDialogText = XmlUnescape(config.GetString(Options.Names.WARNING_DIALOG_TEXT) ?? "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known"),
@@ -204,6 +206,8 @@ namespace HIBPOfflineCheck
             config.SetString(Options.Names.EXCLUDED_TEXT, options.ExcludedText);
             config.SetString(Options.Names.INSECURE_TEXT, options.InsecureText);
             config.SetBool(Options.Names.BREACH_COUNT_DETAILS, options.BreachCountDetails);
+            config.SetBool(Options.Names.EXCLUDE_RECYCLE_BIN, options.ExcludeRecycleBin);
+            config.SetBool(Options.Names.EXCLUDE_EXPIRED, options.ExcludeExpired);
             config.SetBool(Options.Names.WARNING_DIALOG, options.WarningDialog);
             config.SetBool(Options.Names.AUTO_CHECK, options.AutoCheck);
             config.SetString(Options.Names.WARNING_DIALOG_TEXT, XmlEscape(options.WarningDialogText));

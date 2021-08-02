@@ -430,16 +430,27 @@ namespace HIBPOfflineCheck
 
         public void OnMenuFindPwned(object sender, EventArgs e)
         {
+            if (Host.Database == null || Host.Database.RootGroup == null)
+                return;
+
             PwGroup pgResults = new PwGroup(true, true, string.Empty, PwIcon.List)
             {
                 IsVirtual = true
             };
 
-            Host.Database.RootGroup.TraverseTree(TraversalMethod.PreOrder, null, delegate(PwEntry pe)
+            PwGroup recycleBin = Host.Database.RootGroup.FindGroup(Host.Database.RecycleBinUuid, true);
+
+            Host.Database.RootGroup.TraverseTree(TraversalMethod.PreOrder, null, delegate (PwEntry pe)
             {
                 var status = GetCurrentStatus(pe);
                 if (status != null && status.StartsWith(PluginOptions.InsecureText))
                 {
+                    if (PluginOptions.ExcludeExpired && pe.Expires && pe.ExpiryTime.CompareTo(DateTime.UtcNow) <= 0)
+                        return true;
+
+                    if (PluginOptions.ExcludeRecycleBin && pe.ParentGroup == recycleBin)
+                        return true;
+
                     pgResults.AddEntry(pe, false, false);
                 }
 
