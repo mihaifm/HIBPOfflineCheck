@@ -448,8 +448,18 @@ namespace HIBPOfflineCheck
                     if (PluginOptions.ExcludeExpired && pe.Expires && pe.ExpiryTime.CompareTo(DateTime.UtcNow) <= 0)
                         return true;
 
-                    if (PluginOptions.ExcludeRecycleBin && pe.ParentGroup == recycleBin)
-                        return true;
+                    if (PluginOptions.ExcludeRecycleBin)
+                    {
+                        var ancestor = pe.ParentGroup;
+
+                        while (ancestor != null)
+                        {
+                            if (ancestor == recycleBin)
+                                return true;
+
+                            ancestor = ancestor.ParentGroup;
+                        }
+                    }
 
                     pgResults.AddEntry(pe, false, false);
                 }
