@@ -14,6 +14,7 @@ using KeePassLib.Security;
 using System.Net;
 using KeePassLib.Collections;
 using KeePassLib.Delegates;
+using KeePassLib.Serialization;
 
 namespace HIBPOfflineCheck
 {
@@ -92,57 +93,47 @@ namespace HIBPOfflineCheck
             var pwdSha = GetPasswordSHA();
             var truncatedSha = pwdSha.Substring(0, 5);
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-
             var url = "https://api.pwnedpasswords.com/range/" + truncatedSha;
 
-            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            request.UserAgent = "KeePass-HIBP-plug/1.0";
+            IOConnectionInfo ioc = new IOConnectionInfo
+            {
+                Path = url
+            };
 
             try
             {
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = IOConnection.OpenRead(ioc))
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    if (response.StatusCode != HttpStatusCode.OK)
+                    string responseFromServer = reader.ReadToEnd();
+                    var lines = responseFromServer.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+                    Status = PluginOptions.SecureText;
+
+                    foreach (var line in lines)
                     {
-                        Status = "HIBP API error";
-                        return;
-                    }
+                        string fullSha = truncatedSha + line;
+                        var compare = string.Compare(pwdSha, fullSha.Substring(0, pwdSha.Length), StringComparison.Ordinal);
 
-                    using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        string responseFromServer = reader.ReadToEnd();
-                        var lines = responseFromServer.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-
-                        Status = PluginOptions.SecureText;
-
-                        foreach (var line in lines)
+                        if (compare == 0)
                         {
-                            string fullSha = truncatedSha + line;
-                            var compare = string.Compare(pwdSha, fullSha.Substring(0, pwdSha.Length), StringComparison.Ordinal);
+                            var tokens = line.Split(':');
+                            Status = PluginOptions.InsecureText;
+                            insecureWarning = true;
 
-                            if (compare == 0)
+                            if (PluginOptions.BreachCountDetails)
                             {
-                                var tokens = line.Split(':');
-                                Status = PluginOptions.InsecureText;
-                                insecureWarning = true;
-
-                                if (PluginOptions.BreachCountDetails)
-                                {
-                                    Status += " (password count: " + tokens[1].Trim() + ")";
-                                }
-
-                                break;
+                                Status += " (password count: " + tokens[1].Trim() + ")";
                             }
-                        }
 
-                        reader.Close();
-                        stream.Close();
+                            break;
+                        }
                     }
+
+                    reader.Close();
+                    stream.Close();
                 }
+                
             }
             catch
             {
