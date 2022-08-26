@@ -112,6 +112,9 @@ namespace HIBPOfflineCheck
 
                     foreach (var line in lines)
                     {
+                        if (line.Length < pwdSha.Length)
+                            continue;
+
                         string fullSha = truncatedSha + line;
                         var compare = string.Compare(pwdSha, fullSha.Substring(0, pwdSha.Length), StringComparison.Ordinal);
 
