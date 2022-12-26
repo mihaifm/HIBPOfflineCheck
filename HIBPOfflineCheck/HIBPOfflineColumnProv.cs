@@ -112,7 +112,7 @@ namespace HIBPOfflineCheck
 
                     foreach (var line in lines)
                     {
-                        if (line.Length < pwdSha.Length)
+                        if (truncatedSha.Length + line.Length < pwdSha.Length)
                             continue;
 
                         string fullSha = truncatedSha + line;
