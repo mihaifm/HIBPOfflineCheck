@@ -30,7 +30,7 @@ The plugin adds a new column to KeePass. When double-clicking the column for a s
 
 ## Prerequisites
 
-- Download the latest version of the [password list](https://haveibeenpwned.com/Passwords) file from the _haveibeenpwned.com_ website. Use the _Pwned Passwords downloader_ (as of May 2022, this is the best way to get the most up-to-date passwords as suggested by the _Have I Been Pwned_ project's author) to download the file or, alternatively, use the torrent method.
+- Download the latest version of the [password list](https://haveibeenpwned.com/Passwords) file from the _haveibeenpwned.com_ website. The required file is the one with format **SHA-1 (ordered by hash)**. Use the _Pwned Passwords downloader_ (as of May 2022, this is the best way to get the most up-to-date passwords as suggested by the _Have I Been Pwned_ project's author). Alternatively, use the torrent method.
 
     __It's important that you get the SHA-1 (ordered by hash) version of the file, the plugin uses it for fast searching__.
 
@@ -40,25 +40,18 @@ Downloading the file is not required if Online mode is selected in the options, 
 
 ## Installation
 
-#### Secure:
-
-- Build the plugin from source using Visual Studio: open the .sln file and compile the Release configuration.
-- Copy the .dll from `bin\Release` to the Plugins folder of the KeePass installation.
-
-#### Quick
-
 - Download [HIBPOfflineCheck.plgx](https://github.com/mihaifm/HIBPOfflineCheck/releases/latest) from Releases.
 - Copy it in the Plugins folder of the KeePass installation.
 
 ## Configuration
 
-To configure the plugin, open `Tools` -> `HIBP Offline Check...`.
+To configure the plugin, open `Tools` -> `HIBP Offline Check...`
 
-![image](https://user-images.githubusercontent.com/981184/60772001-3307e600-a0f8-11e9-83f6-ae7dcc65ce71.png)
+![image](https://user-images.githubusercontent.com/981184/209883257-0232c11f-0a2c-4f1d-b3c0-fa18b5b3c7bc.png)
 
-If the `Offline` mode is selected then the `Pwned passwords file` must be set pointing to the extracted password list text file. If the `Pwned passwords file` is not set then the plugin will try to find a password list text file in the same location as the `KeePass.exe`.
+If the Offline mode is selected then `Pwned passwords file` must be set to the extracted password list file. If `Pwned passwords file` is not set then the plugin will try to find a password list file in the same location as `KeePass.exe`.
 
-Note that after changing the `Column name`, a new column will be created with the new name and needs to be enabled under `View` -> `Configure Columns -> `Provided by Plugins`. Before changing the column name, it is recommended that you clear the status of all entries (`Tools` -> `HIBP Offline Check` -> `Clear Status`).
+If you want to change `Column name`, a new column will be created with the new name and needs to be enabled under `View` -> `Configure Columns` -> `Provided by Plugins`. Before changing the column name, it is recommended that you clear the status of all entries (`Tools` -> `HIBP Offline Check` -> `Clear Status`).
 
 ## Usage
 
@@ -75,7 +68,7 @@ __Double click__ a password entry under the `Have I been pwned?` column to get t
     
 ### Multiple passwords check
 
-__Select multiple entries__, then right click on the selection -> `Have I been pwned?` -> `Check`.
+__Select multiple entries__, then right click on the selection -> `Have I been pwned?` -> `Check`
     
 ![image](https://user-images.githubusercontent.com/981184/64819685-86465b00-d5b7-11e9-8e81-e95b31acbfd7.png)
         
@@ -83,7 +76,7 @@ __Select multiple entries__, then right click on the selection -> `Have I been p
 
 To check all the passwords in the database:    
 
-`Tools` -> `HIBP Offline Check...` -> `Check All Passwords`.
+`Tools` -> `HIBP Offline Check...` -> `Check All Passwords`
 
 ### Automatic checks
 
@@ -93,7 +86,7 @@ Newly created and updated entries are automatically checked. There is also an op
 
 To view all your insecure passwords, use the Find menu (it will only display passwords which have been checked, so make sure to check all first):
 
-`Find` -> `Pwned Passwords`.
+`Find` -> `Pwned Passwords`
 
 ### Bloom filter
 
@@ -101,6 +94,11 @@ A [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) allows you to save 
 
 You can generate the Bloom filter by selecting `Tools` -> `HIBP Offline Check` -> `Bloom filter` and then `Generate Bloom Filter...`.
 It may take anywhere between 15-45 minutes to generate the filter, depending on your hardware. For convenience the filter has also been uploaded to this separate [HIBPBloomFilter](https://github.com/mihaifm/HIBPBloomFilter) repository, so you can download it instead of generating it.
+
+## Building the plugin
+
+You can build the plugin from source using Visual Studio: open the .sln file and compile the Release configuration.
+Copy the .dll from `bin\Release` to the Plugins folder of the KeePass installation.
 
 **Enjoy!**
 
