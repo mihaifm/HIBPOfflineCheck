@@ -259,8 +259,17 @@ namespace HIBPOfflineCheck
         private void PwdTouchedHandler(object sender, ObjectTouchedEventArgs e)
         {
             PwEntry pe = sender as PwEntry;
+
             if (e.Modified)
             {
+                if (pe.History.UCount > 0)
+                {
+                    var lastPwEntry = pe.History.GetAt(pe.History.UCount - 1);
+
+                    if (lastPwEntry.Strings.GetSafe(PwDefs.PasswordField).Equals(pe.Strings.GetSafe(PwDefs.PasswordField)))
+                        return;
+                }
+
                 if (receivedStatus == false)
                 {
                     PasswordEntry = pe;
