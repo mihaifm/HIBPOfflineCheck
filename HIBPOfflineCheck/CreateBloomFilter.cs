@@ -145,6 +145,8 @@ namespace HIBPOfflineCheck
 
         private async void Bloom()
         {
+            ToggleControls(enabled: false);
+
             progressBar.Show();
 
             stopwatch.Start();
@@ -165,11 +167,22 @@ namespace HIBPOfflineCheck
             stopwatch.Reset();
             progressBar.Value = 0;
             progressBar.Hide();
+
+            ToggleControls(enabled: true);
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
             labelInfo.Text = "Elapsed time: " + stopwatch.Elapsed.ToString("hh\\:mm\\:ss");
+        }
+
+        private void ToggleControls(bool enabled)
+        {
+            this.textBoxInput.Enabled = enabled;
+            this.textBoxOutput.Enabled = enabled;
+            this.buttonSelectInput.Enabled = enabled;
+            this.buttonSelectOutput.Enabled = enabled;
+            this.buttonCreate.Enabled = enabled;
         }
     }
 }
