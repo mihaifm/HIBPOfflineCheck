@@ -313,7 +313,9 @@ namespace HIBPOfflineCheck
                 pe.Touched -= PwdTouchedHandler;
                 pe.Touched += PwdTouchedHandler;
 
+                var lastModificationTime = pe.LastModificationTime;
                 pe.Touch(true);
+                pe.LastModificationTime = lastModificationTime;
             }
 
             ResetState();
