@@ -1,20 +1,17 @@
-﻿using System;
-using System.ComponentModel;
+﻿using KeePass.Forms;
+using KeePass.Plugins;
+using KeePass.UI;
+using KeePass.Util.Spr;
+using KeePassLib;
+using KeePassLib.Collections;
+using KeePassLib.Security;
+using KeePassLib.Serialization;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using KeePass.Forms;
-using KeePass.Plugins;
-using KeePass.UI;
-using KeePass.Util.Spr;
-using KeePassLib;
-using KeePassLib.Security;
-using System.Net;
-using KeePassLib.Collections;
-using KeePassLib.Delegates;
-using KeePassLib.Serialization;
 
 namespace HIBPOfflineCheck
 {
