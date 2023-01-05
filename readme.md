@@ -32,6 +32,8 @@ The plugin adds a new column to KeePass. When double-clicking the column for a s
 
 If you are using KeePass on Windows, this plugin requires **Microsoft .NET Framework 4.5** to run.
 
+When running KeePass under Mono (on Ubuntu/Debian), if the plugin does not compile or load, verify that you have installed the `mono-mcs` package. This package contains the compilers needed for KeePass to compile the plugins in the PLGX format.
+
 - Download the latest version of the [password list](https://haveibeenpwned.com/Passwords) file from the _haveibeenpwned.com_ website. The required file is the one with format **SHA-1 (ordered by hash)**. Use the _Pwned Passwords downloader_ (as of May 2022, this is the best way to get the most up-to-date passwords as suggested by the _Have I Been Pwned_ project's author). Alternatively, use the torrent method.
 
     __It's important that you get the SHA-1 (ordered by hash) version of the file, the plugin uses it for fast searching__.
