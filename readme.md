@@ -30,17 +30,15 @@ The plugin adds a new column to KeePass. When double-clicking the column for a s
 
 ## Prerequisites
 
+Download the latest version of the [password list](https://haveibeenpwned.com/Passwords) using the [haveibeenpwned-downloader](https://github.com/HaveIBeenPwned/PwnedPasswordsDownloader):
+
+    haveibeenpwned-downloader.exe pwnedpasswords
+
+Downloading the file is not required if Online mode is selected in the options.
+
 If you are using KeePass on Windows, this plugin requires **Microsoft .NET Framework 4.5** to run.
 
-When running KeePass under Mono (on Ubuntu/Debian), if the plugin does not compile or load, verify that you have installed the `mono-mcs` package. This package contains the compilers needed for KeePass to compile the plugins in the PLGX format.
-
-- Download the latest version of the [password list](https://haveibeenpwned.com/Passwords) file from the _haveibeenpwned.com_ website. The required file is the one with format **SHA-1 (ordered by hash)**. Use the _Pwned Passwords downloader_ (as of May 2022, this is the best way to get the most up-to-date passwords as suggested by the _Have I Been Pwned_ project's author). Alternatively, use the torrent method.
-
-    __It's important that you get the SHA-1 (ordered by hash) version of the file, the plugin uses it for fast searching__.
-
-- Extract the file from the 7-Zip archive.
-
-Downloading the file is not required if Online mode is selected in the options, however using Offline mode significantly speeds up the checking process if you have a lot of passwords. 
+When running KeePass under Mono (on Ubuntu/Debian), if the plugin does not compile or load, verify that you have installed the `mono-mcs` package.
 
 ## Installation
 
@@ -51,9 +49,9 @@ Downloading the file is not required if Online mode is selected in the options, 
 
 To configure the plugin, open `Tools` -> `HIBP Offline Check...`
 
-![image](https://user-images.githubusercontent.com/981184/209883257-0232c11f-0a2c-4f1d-b3c0-fa18b5b3c7bc.png)
+![image](https://github.com/mihaifm/HIBPOfflineCheck/assets/981184/b134904f-5a8a-4cff-86cb-89fcd6abdf43)
 
-If the Offline mode is selected then `Pwned passwords file` must be set to the extracted password list file. If `Pwned passwords file` is not set then the plugin will try to find a password list file in the same location as `KeePass.exe`.
+If the Offline mode is selected then `Pwned passwords file` must be set to the password list file. If `Pwned passwords file` is not set then the plugin will try to find a password list file in the same location as `KeePass.exe`.
 
 If you want to change `Column name`, a new column will be created with the new name and needs to be enabled under `View` -> `Configure Columns` -> `Provided by Plugins`. Before changing the column name, it is recommended that you clear the status of all entries (`Tools` -> `HIBP Offline Check` -> `Clear Status`).
 
