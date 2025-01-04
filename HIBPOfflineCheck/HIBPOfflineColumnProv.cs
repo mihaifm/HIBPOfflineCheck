@@ -50,6 +50,19 @@ namespace HIBPOfflineCheck
                 return;
             }
 
+            if (IsEmptyPassword())
+            {
+                if (PluginOptions.MarkEmptyPasswords == Options.EmptyPwdDefault.Secure)
+                    Status = PluginOptions.SecureText;
+                else if (PluginOptions.MarkEmptyPasswords == Options.EmptyPwdDefault.Pwned)
+                    Status = PluginOptions.InsecureText;
+                else if (PluginOptions.MarkEmptyPasswords == Options.EmptyPwdDefault.Excluded)
+                    Status = PluginOptions.ExcludedText;
+
+                receivedStatus = true;
+                return;
+            }
+
             if (PluginOptions.CheckMode == Options.CheckModeType.Offline)
             {
                 GetOfflineStatus();
@@ -72,7 +85,7 @@ namespace HIBPOfflineCheck
             {
                 var context = new SprContext(PasswordEntry, Host.Database, SprCompileFlags.All);
                 var password = SprEngine.Compile(PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).ReadString(), context);
-
+                
                 var pwdShaBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
                 var sb = new StringBuilder(2 * pwdShaBytes.Length);
 
@@ -83,6 +96,11 @@ namespace HIBPOfflineCheck
 
                 return sb.ToString();
             }
+        }
+
+        private bool IsEmptyPassword()
+        {
+            return PasswordEntry.Strings.GetSafe(PwDefs.PasswordField).IsEmpty;
         }
 
         private void GetOnlineStatus()

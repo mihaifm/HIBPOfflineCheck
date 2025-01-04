@@ -186,7 +186,8 @@ namespace HIBPOfflineCheck
                 WarningDialog = config.GetBool(Options.Names.WARNING_DIALOG, false),
                 AutoCheck = config.GetBool(Options.Names.AUTO_CHECK, true),
                 WarningDialogText = XmlUnescape(config.GetString(Options.Names.WARNING_DIALOG_TEXT) ?? "WARNING - INSECURE PASSWORD\r\n\r\nThis password is insecure and publicly known"),
-                BloomFilter = config.GetString(Options.Names.BLOOM_FILTER) ?? ""
+                BloomFilter = config.GetString(Options.Names.BLOOM_FILTER) ?? "",
+                MarkEmptyPasswords = (Options.EmptyPwdDefault) config.GetLong(Options.Names.MARK_EMPTY_PASSWORDS, (long) Options.EmptyPwdDefault.Secure)
             };
 
             this.options = options;
@@ -212,6 +213,7 @@ namespace HIBPOfflineCheck
             config.SetBool(Options.Names.AUTO_CHECK, options.AutoCheck);
             config.SetString(Options.Names.WARNING_DIALOG_TEXT, XmlEscape(options.WarningDialogText));
             config.SetString(Options.Names.BLOOM_FILTER, options.BloomFilter);
+            config.SetLong(Options.Names.MARK_EMPTY_PASSWORDS, (long) options.MarkEmptyPasswords);
 
             this.options = options;
             prov.PluginOptions = options;

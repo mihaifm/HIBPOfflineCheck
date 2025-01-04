@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxExcludeRecycleBin = new System.Windows.Forms.CheckBox();
+            this.checkBoxExcludeExpired = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoCheck = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxExcludedText = new System.Windows.Forms.TextBox();
@@ -59,8 +61,8 @@
             this.groupBoxActions = new System.Windows.Forms.GroupBox();
             this.buttonClearAll = new System.Windows.Forms.Button();
             this.buttonCheckAll = new System.Windows.Forms.Button();
-            this.checkBoxExcludeExpired = new System.Windows.Forms.CheckBox();
-            this.checkBoxExcludeRecycleBin = new System.Windows.Forms.CheckBox();
+            this.comboBoxEmptyPw = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBoxOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_BannerImage)).BeginInit();
             this.groupBoxActions.SuspendLayout();
@@ -69,6 +71,8 @@
             // groupBoxOptions
             // 
             this.groupBoxOptions.BackColor = System.Drawing.SystemColors.Window;
+            this.groupBoxOptions.Controls.Add(this.label9);
+            this.groupBoxOptions.Controls.Add(this.comboBoxEmptyPw);
             this.groupBoxOptions.Controls.Add(this.checkBoxExcludeRecycleBin);
             this.groupBoxOptions.Controls.Add(this.checkBoxExcludeExpired);
             this.groupBoxOptions.Controls.Add(this.checkBoxAutoCheck);
@@ -97,17 +101,37 @@
             this.groupBoxOptions.Controls.Add(this.label1);
             this.groupBoxOptions.Location = new System.Drawing.Point(12, 125);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(564, 429);
+            this.groupBoxOptions.Size = new System.Drawing.Size(564, 441);
             this.groupBoxOptions.TabIndex = 0;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
+            // 
+            // checkBoxExcludeRecycleBin
+            // 
+            this.checkBoxExcludeRecycleBin.AutoSize = true;
+            this.checkBoxExcludeRecycleBin.Location = new System.Drawing.Point(6, 315);
+            this.checkBoxExcludeRecycleBin.Name = "checkBoxExcludeRecycleBin";
+            this.checkBoxExcludeRecycleBin.Size = new System.Drawing.Size(237, 17);
+            this.checkBoxExcludeRecycleBin.TabIndex = 26;
+            this.checkBoxExcludeRecycleBin.Text = "Exclude Recycle Bin entries from Find results";
+            this.checkBoxExcludeRecycleBin.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxExcludeExpired
+            // 
+            this.checkBoxExcludeExpired.AutoSize = true;
+            this.checkBoxExcludeExpired.Location = new System.Drawing.Point(6, 338);
+            this.checkBoxExcludeExpired.Name = "checkBoxExcludeExpired";
+            this.checkBoxExcludeExpired.Size = new System.Drawing.Size(214, 17);
+            this.checkBoxExcludeExpired.TabIndex = 25;
+            this.checkBoxExcludeExpired.Text = "Exclude expired entries from Find results";
+            this.checkBoxExcludeExpired.UseVisualStyleBackColor = true;
             // 
             // checkBoxAutoCheck
             // 
             this.checkBoxAutoCheck.AutoSize = true;
             this.checkBoxAutoCheck.Checked = true;
             this.checkBoxAutoCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoCheck.Location = new System.Drawing.Point(6, 256);
+            this.checkBoxAutoCheck.Location = new System.Drawing.Point(6, 269);
             this.checkBoxAutoCheck.Name = "checkBoxAutoCheck";
             this.checkBoxAutoCheck.Size = new System.Drawing.Size(232, 17);
             this.checkBoxAutoCheck.TabIndex = 23;
@@ -214,7 +238,7 @@
             // textBoxWarningDialog
             // 
             this.textBoxWarningDialog.AcceptsReturn = true;
-            this.textBoxWarningDialog.Location = new System.Drawing.Point(6, 371);
+            this.textBoxWarningDialog.Location = new System.Drawing.Point(6, 384);
             this.textBoxWarningDialog.Multiline = true;
             this.textBoxWarningDialog.Name = "textBoxWarningDialog";
             this.textBoxWarningDialog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -234,7 +258,7 @@
             // checkBoxWarningDialog
             // 
             this.checkBoxWarningDialog.AutoSize = true;
-            this.checkBoxWarningDialog.Location = new System.Drawing.Point(6, 348);
+            this.checkBoxWarningDialog.Location = new System.Drawing.Point(6, 361);
             this.checkBoxWarningDialog.Name = "checkBoxWarningDialog";
             this.checkBoxWarningDialog.Size = new System.Drawing.Size(302, 17);
             this.checkBoxWarningDialog.TabIndex = 9;
@@ -257,7 +281,7 @@
             this.checkBoxBreachCountDetails.AutoSize = true;
             this.checkBoxBreachCountDetails.Checked = true;
             this.checkBoxBreachCountDetails.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBreachCountDetails.Location = new System.Drawing.Point(6, 279);
+            this.checkBoxBreachCountDetails.Location = new System.Drawing.Point(6, 292);
             this.checkBoxBreachCountDetails.Name = "checkBoxBreachCountDetails";
             this.checkBoxBreachCountDetails.Size = new System.Drawing.Size(271, 17);
             this.checkBoxBreachCountDetails.TabIndex = 8;
@@ -334,7 +358,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(420, 560);
+            this.buttonOK.Location = new System.Drawing.Point(420, 572);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 2;
@@ -346,7 +370,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(501, 560);
+            this.buttonCancel.Location = new System.Drawing.Point(501, 572);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -393,25 +417,26 @@
             this.buttonCheckAll.UseVisualStyleBackColor = true;
             this.buttonCheckAll.Click += new System.EventHandler(this.buttonCheckAll_Click);
             // 
-            // checkBoxExcludeExpired
+            // comboBoxEmptyPw
             // 
-            this.checkBoxExcludeExpired.AutoSize = true;
-            this.checkBoxExcludeExpired.Location = new System.Drawing.Point(6, 325);
-            this.checkBoxExcludeExpired.Name = "checkBoxExcludeExpired";
-            this.checkBoxExcludeExpired.Size = new System.Drawing.Size(214, 17);
-            this.checkBoxExcludeExpired.TabIndex = 25;
-            this.checkBoxExcludeExpired.Text = "Exclude expired entries from Find results";
-            this.checkBoxExcludeExpired.UseVisualStyleBackColor = true;
+            this.comboBoxEmptyPw.FormattingEnabled = true;
+            this.comboBoxEmptyPw.Items.AddRange(new object[] {
+            "Secure",
+            "Pwned",
+            "Excluded"});
+            this.comboBoxEmptyPw.Location = new System.Drawing.Point(130, 243);
+            this.comboBoxEmptyPw.Name = "comboBoxEmptyPw";
+            this.comboBoxEmptyPw.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxEmptyPw.TabIndex = 27;
             // 
-            // checkBoxExcludeRecycleBin
+            // label9
             // 
-            this.checkBoxExcludeRecycleBin.AutoSize = true;
-            this.checkBoxExcludeRecycleBin.Location = new System.Drawing.Point(6, 302);
-            this.checkBoxExcludeRecycleBin.Name = "checkBoxExcludeRecycleBin";
-            this.checkBoxExcludeRecycleBin.Size = new System.Drawing.Size(237, 17);
-            this.checkBoxExcludeRecycleBin.TabIndex = 26;
-            this.checkBoxExcludeRecycleBin.Text = "Exclude Recycle Bin entries from Find results";
-            this.checkBoxExcludeRecycleBin.UseVisualStyleBackColor = true;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 246);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(118, 13);
+            this.label9.TabIndex = 28;
+            this.label9.Text = "Mark empty passowrds:";
             // 
             // HIBPOfflineCheckOptions
             // 
@@ -420,7 +445,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(588, 595);
+            this.ClientSize = new System.Drawing.Size(588, 607);
             this.Controls.Add(this.groupBoxActions);
             this.Controls.Add(this.pb_BannerImage);
             this.Controls.Add(this.buttonCancel);
@@ -477,5 +502,7 @@
         private System.Windows.Forms.TextBox textBoxExcludedText;
         private System.Windows.Forms.CheckBox checkBoxExcludeRecycleBin;
         private System.Windows.Forms.CheckBox checkBoxExcludeExpired;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox comboBoxEmptyPw;
     }
 }

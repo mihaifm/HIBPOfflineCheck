@@ -34,6 +34,7 @@ namespace HIBPOfflineCheck
             options.WarningDialog = checkBoxWarningDialog.Checked;
             options.AutoCheck = checkBoxAutoCheck.Checked;
             options.WarningDialogText = textBoxWarningDialog.Text;
+            options.MarkEmptyPasswords = (Options.EmptyPwdDefault) comboBoxEmptyPw.SelectedIndex;
 
             bool bloomFilterChanged = (options.BloomFilter != textBoxBloomFilter.Text);
             options.BloomFilter = textBoxBloomFilter.Text;
@@ -89,6 +90,7 @@ namespace HIBPOfflineCheck
             textBoxBloomFilter.Enabled = radioButtonBloom.Checked;
             buttonCreateBloom.Enabled = radioButtonBloom.Checked;
             buttonBrowseBloom.Enabled = radioButtonBloom.Checked;
+            comboBoxEmptyPw.SelectedIndex = (int) options.MarkEmptyPasswords;
 
             textBoxFileName.Select();
             textBoxFileName.Select(0, 0);

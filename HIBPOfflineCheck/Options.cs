@@ -9,6 +9,13 @@
             BloomFilter = 2
         }
 
+        public enum EmptyPwdDefault
+        {
+            Secure = 0,
+            Pwned = 1,
+            Excluded = 2
+        }
+
         public static class Names
         {
             private const string PLUGIN_NAMESPACE = "HIBPOfflineCheck";
@@ -26,6 +33,7 @@
             public const string CHECK_MODE = PLUGIN_NAMESPACE + ".CheckMode";
             public const string BLOOM_FILTER = PLUGIN_NAMESPACE + ".BloomFilter";
             public const string AUTO_CHECK = PLUGIN_NAMESPACE + ".AutoCheck";
+            public const string MARK_EMPTY_PASSWORDS = PLUGIN_NAMESPACE + ".MarkEmptyPasswords";
         }
 
         public string HIBPFileName { get; set; }
@@ -41,5 +49,6 @@
         public CheckModeType CheckMode { get; set; }
         public string BloomFilter { get; set; }
         public bool AutoCheck { get; set; }
+        public EmptyPwdDefault MarkEmptyPasswords { get; set; }
     }
 }
