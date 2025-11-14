@@ -36,7 +36,7 @@ Download the latest version of the [password list](https://haveibeenpwned.com/Pa
 
 Downloading the file is not required if Online mode is selected in the options.
 
-If you are using KeePass on Windows, this plugin requires **Microsoft .NET Framework 4.5** to run.
+If you are using KeePass on Windows, this plugin requires Microsoft .NET Framework 4.5 to run.
 
 When running KeePass under Mono (on Ubuntu/Debian), if the plugin does not compile or load, verify that you have installed the `mono-mcs` package.
 
@@ -92,10 +92,12 @@ To view all your insecure passwords, use the Find menu (it will only display pas
 
 ### Bloom filter
 
-A [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) allows you to save disk space by not having to store the HIBP passwords file on your drive. Instead, a generated file (currently under 1GB in size) would be loaded, providing an accuracy of 99.9% for password checking. Only about 1/1000 Secure passwords would be false positives, showing up as Pwned. Pwned passwords will *never* show up as Secure.
+A [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) allows you to save disk space by not having to store the HIBP passwords file on your drive. Instead, a generated file (currently around 3.5GB in size) would be loaded, providing an accuracy of 99.9% for password checking. Only about 1/1000 Secure passwords would be false positives, showing up as Pwned. Pwned passwords will *never* show up as Secure.
 
 You can generate the Bloom filter by selecting `Tools` -> `HIBP Offline Check` -> `Bloom filter` and then `Generate Bloom Filter...`.
 It may take anywhere between 15-45 minutes to generate the filter, depending on your hardware. For convenience the filter has also been uploaded to this separate [HIBPBloomFilter](https://github.com/mihaifm/HIBPBloomFilter) repository, so you can download it instead of generating it.
+
+Note that with this option, the bloom filter needs to be loaded into RAM, which will significantly increase KeePass' memory footprint.
 
 ## Building the plugin
 
